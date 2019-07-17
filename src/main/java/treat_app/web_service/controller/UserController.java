@@ -19,12 +19,11 @@ public class UserController {
     @GetMapping("{id}")
     public ResponseEntity<User> read(@PathVariable Long id) {
         User user = userService.getByid(id);
-        return ResponseEntity.ok(user);
+        return ResponseEntity.ok().body(user);
     }
 
     @GetMapping()
     public String readTest() {
-
         return "server works";
     }
 }

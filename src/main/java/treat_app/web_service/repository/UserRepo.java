@@ -3,6 +3,7 @@ package treat_app.web_service.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import treat_app.web_service.entity.User;
+import treat_app.web_service.exceptions.NotFoundException;
 
 import java.util.List;
 
@@ -10,7 +11,7 @@ import java.util.List;
 public interface UserRepo extends CrudRepository<User, Long> {
 
     default User findByIdOrThrow(Long id) {
-        return findById(id).orElseThrow();
+        return findById(id).orElseThrow(() -> new NotFoundException("There is no user with id " + id));
     }
 
     @Override
