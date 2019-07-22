@@ -14,7 +14,7 @@ import treat_app.web_service.service.UserService;
 @AllArgsConstructor
 public class UserController {
 
-    private final UserService userService;
+    private UserService userService;
 
     @GetMapping("{id}")
     public ResponseEntity<User> read(@PathVariable Long id) {
