@@ -4,6 +4,7 @@ import org.mapstruct.Mapper;
 import treat_app.web_service.entity.User;
 import treat_app.web_service.service.dto.UserDto;
 
+
 @Mapper(componentModel = "spring")
 public interface UserMapper {
 
@@ -11,3 +12,4 @@ public interface UserMapper {
 
     User toEntity(UserDto dto);
 }
+

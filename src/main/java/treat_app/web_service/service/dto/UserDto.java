@@ -10,5 +10,5 @@ public class UserDto {
     private Long id;
     private String userLogin;
     private String password;
-    private List<Long> treatIds;
+    private List<TreatDto> treatDtos;
 }
