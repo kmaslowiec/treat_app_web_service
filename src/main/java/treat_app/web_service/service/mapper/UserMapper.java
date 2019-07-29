@@ -15,7 +15,7 @@ public interface UserMapper {
     UserDto toDto(User user);
     User toEntity(UserDto dto);
 
-    List<TreatDto> toDtos(List<Treat> treats);
+    List<TreatDto> toTreatDtos(List<Treat> treats);
 
-    List<Treat> toEntities(List<TreatDto> dtos);
+    List<Treat> toTreatEntities(List<TreatDto> dtos);
 }

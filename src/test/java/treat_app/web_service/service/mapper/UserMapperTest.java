@@ -11,12 +11,14 @@ import treat_app.web_service.entity.User;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.dto.UserDto;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
-@SpringBootTest(classes = {UserMapperImpl.class})
+@SpringBootTest(classes = {UserMapperImpl.class, TreatMapperImpl.class})
 public class UserMapperTest {
 
     @Autowired
@@ -82,5 +84,23 @@ public class UserMapperTest {
 
         //then
         assertThat(result).isNull();
+    }
+
+    @Test
+    public void toTreatDtos_treatEntieties_returnTreatDtos() {
+        //given
+        List<Treat> entieties = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(ObjectFactory.User()), ObjectFactory.Treat_id_name_user(2L, "bob", ObjectFactory.User())));
+
+        //when
+        List<TreatDto> result = userMapper.toTreatDtos(entieties);
+
+        //then
+        assertThat(result).isNotNull();
+        assertThat(result).isNotEmpty();
+        assertThat(result).hasSameSizeAs(entieties);
+        for (int i = 0; i < result.size(); i++) {
+            assertThat(result.get(i)).isEqualToComparingOnlyGivenFields(entieties.get(i), "id", "name", "amount", "increaseBy", "pic");
+            assertThat(result.get(i).getUserId()).isEqualTo(entieties.get(i).getUser().getId());
+        }
     }
 }
