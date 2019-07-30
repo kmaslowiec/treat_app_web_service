@@ -140,4 +140,22 @@ public class UserMapperTest {
             assertThat(result.get(i).getUser().getId()).isEqualTo(dtos.get(i).getUserId());
         }
     }
+
+    @Test
+    public void toTreatEntities_null_returnsNull() {
+        //when
+        List<Treat> result = userMapper.toTreatEntities(null);
+
+        //then
+        assertThat(result).isNull();
+    }
+
+    @Test
+    public void toTreat_emptyList_returnsEmptyList() {
+        //when
+        List<Treat> result = userMapper.toTreatEntities(Collections.emptyList());
+
+        //then
+        assertThat(result).isEmpty();
+    }
 }
