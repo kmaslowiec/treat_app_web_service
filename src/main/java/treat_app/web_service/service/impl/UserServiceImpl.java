@@ -5,6 +5,8 @@ import org.springframework.stereotype.Service;
 import treat_app.web_service.entity.User;
 import treat_app.web_service.repository.UserRepo;
 import treat_app.web_service.service.UserService;
+import treat_app.web_service.service.dto.UserDto;
+import treat_app.web_service.service.mapper.UserMapper;
 
 import java.util.List;
 
@@ -13,10 +15,13 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private UserRepo userRepo;
+    private UserMapper userMapper;
 
     @Override
-    public User create(User user) {
-        return userRepo.save(user);
+    public UserDto create(UserDto userDto) {
+        User user = userMapper.toEntity(userDto);
+        User savedUser = userRepo.save(user);
+        return userMapper.toDto(savedUser);
     }
 
     @Override
