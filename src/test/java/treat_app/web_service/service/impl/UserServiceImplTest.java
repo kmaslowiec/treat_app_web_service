@@ -46,14 +46,14 @@ public class UserServiceImplTest {
         UserDto enterDto = ObjectFactory.UserDto();
         enterDto.setTreatDtos(treatsInEnteredDto);
         User user = ObjectFactory.User();
-        List<Treat> treatsDtosFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
-        user.setTreats(treatsDtosFromUser);
+        List<Treat> treatDtosFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
+        user.setTreats(treatDtosFromUser);
 
         User savedUser = ObjectFactory.User();
         UserDto returnedDto = ObjectFactory.UserDto();
 
         //when
-        when(userMapper.toTreatEntities(enterDto.getTreatDtos())).thenReturn(treatsDtosFromUser);
+        when(userMapper.toTreatEntities(enterDto.getTreatDtos())).thenReturn(treatDtosFromUser);
         when(userMapper.toEntity(enterDto)).thenReturn(user);
         when(userRepo.save(user)).thenReturn(savedUser);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
@@ -66,6 +66,11 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getByid() {
+    public void getByid_validLong_returnsUserDto() {
+        //given
+
+        //when
+
+        //then
     }
 }
