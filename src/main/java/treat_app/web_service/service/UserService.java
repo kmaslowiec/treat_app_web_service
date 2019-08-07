@@ -1,14 +1,10 @@
 package treat_app.web_service.service;
 
-import treat_app.web_service.entity.User;
-
-import java.util.List;
+import treat_app.web_service.service.dto.UserDto;
 
 public interface UserService {
 
-    User create(User user);
+    UserDto create(UserDto user);
 
-    List<User> getAll();
-
-    User getByid(Long id);
+    UserDto getByid(Long id);
 }
