@@ -8,8 +8,6 @@ import treat_app.web_service.service.UserService;
 import treat_app.web_service.service.dto.UserDto;
 import treat_app.web_service.service.mapper.UserMapper;
 
-import java.util.List;
-
 @Service
 @AllArgsConstructor
 public class UserServiceImpl implements UserService {
@@ -25,12 +23,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public List<User> getAll() {
-        return null;
-    }
-
-    @Override
-    public User getByid(Long id) {
-        return userRepo.findByIdOrThrow(id);
+    public UserDto getByid(Long id) {
+        User user = userRepo.findByIdOrThrow(id);
+        return userMapper.toDto(user);
     }
 }
