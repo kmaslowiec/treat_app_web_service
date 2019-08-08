@@ -20,7 +20,7 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserDto create(UserDto userDto) { //v2
         List<Treat> treats = userMapper.toTreatEntities(userDto.getTreatDtos());
         User user = userMapper.toEntity(userDto);
         user.setTreats(treats);
@@ -35,11 +35,11 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getByid(Long id) {
-        User user = userRepo.findByIdOrThrow(id);
+    public UserDto getByid(Long id) { //v2
+        User userFromDb = userRepo.findByIdOrThrow(id);
 
-        List<TreatDto> treatDtos = userMapper.toTreatDtos(user.getTreats());
-        UserDto returnedDto = userMapper.toDto(user);
+        List<TreatDto> treatDtos = userMapper.toTreatDtos(userFromDb.getTreats());
+        UserDto returnedDto = userMapper.toDto(userFromDb);
         returnedDto.setTreatDtos(treatDtos);
 
         return returnedDto;

@@ -46,14 +46,14 @@ public class UserServiceImplTest {
         UserDto enterDto = ObjectFactory.UserDto();
         enterDto.setTreatDtos(treatsInEnteredDto);
         User user = ObjectFactory.User();
-        List<Treat> treatDtosFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
-        user.setTreats(treatDtosFromUser);
+        List<Treat> treatsFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
+        user.setTreats(treatsFromUser);
 
         User savedUser = ObjectFactory.User();
         UserDto returnedDto = ObjectFactory.UserDto();
 
         //when
-        when(userMapper.toTreatEntities(enterDto.getTreatDtos())).thenReturn(treatDtosFromUser);
+        when(userMapper.toTreatEntities(enterDto.getTreatDtos())).thenReturn(treatsFromUser);
         when(userMapper.toEntity(enterDto)).thenReturn(user);
         when(userRepo.save(user)).thenReturn(savedUser);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
@@ -68,9 +68,22 @@ public class UserServiceImplTest {
     @Test
     public void getByid_validLong_returnsUserDto() {
         //given
+        User userFromDb = ObjectFactory.User();
+        List<Treat> treatDtosFromDb = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(userFromDb), ObjectFactory.Treat_id_name_user(2L, "second", userFromDb)));
+        userFromDb.setTreats(treatDtosFromDb);
+        List<TreatDto> dtosFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.TreatDto_userId(1L), ObjectFactory.TreatDto_id_name_userId(2L, "second", 1L)));
+        UserDto returnedDto = ObjectFactory.UserDto();
+        returnedDto.setTreatDtos(dtosFromUser);
 
         //when
+        when(userMapper.toTreatDtos(userFromDb.getTreats())).thenReturn(dtosFromUser);
+        when(userRepo.findByIdOrThrow(1L)).thenReturn(userFromDb);
+        when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
+
+        UserDto testedDto = service.getByid(1L);
 
         //then
+        assertThat(testedDto).isNotNull();
+        assertThat(testedDto.getTreatDtos()).isEqualTo(userFromDb.getTreats());
     }
 }
