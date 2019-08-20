@@ -50,8 +50,4 @@ public class UserServiceImpl implements UserService {
 
         return returnedDto;
     }
-
-    private List<Object> returnEmptyList(List<Object> list) {
-        return list.isEmpty() ? Collections.emptyList() : list;
-    }
 }

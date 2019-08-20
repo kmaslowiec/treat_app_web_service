@@ -17,6 +17,7 @@ import treat_app.web_service.service.mapper.UserMapper;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -75,12 +76,23 @@ public class UserServiceImplTest {
         UserDto enteredDto = ObjectFactory.UserDto();
         enteredDto.setTreatDtos(null);
         User user = ObjectFactory.User();
-        List<Treat> treatsFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
+        List<Treat> treatsFromUser = Collections.emptyList();
         user.setTreats(treatsFromUser);
 
         User savedUser = ObjectFactory.User();
         UserDto returnedDto = ObjectFactory.UserDto();
-        //TODO test what happens if User with empty list is given
+
+        //when
+        when(userMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
+        when(userMapper.toEntity(enteredDto)).thenReturn(user);
+        when(userRepo.save(user)).thenReturn(savedUser);
+        when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
+        when(userMapper.toTreatDtos(savedUser.getTreats())).thenReturn(Collections.emptyList());
+
+        UserDto testedDto = service.create(enteredDto);
+
+        //then
+        assertThat(testedDto.getTreatDtos()).isEmpty();
     }
 
     @Test
