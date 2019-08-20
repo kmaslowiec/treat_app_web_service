@@ -1,11 +1,9 @@
 package treat_app.web_service.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
+import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Entity
@@ -18,9 +16,14 @@ public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @NotNull
     private String userLogin;
+
+    @NotNull
     private String password;
 
+    @ToString.Exclude
     @OneToMany(mappedBy = "user")
     private List<Treat> treats;
 }

@@ -18,8 +18,8 @@ public class UserController {
 
     @GetMapping("{id}")
     public ResponseEntity<User> read(@PathVariable Long id) {
-        User user = userService.getByid(id);
-        return ResponseEntity.ok().body(user);
+
+        return null;
     }
 
     @GetMapping()
