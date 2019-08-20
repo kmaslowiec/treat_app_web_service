@@ -43,8 +43,8 @@ public class UserServiceImplTest {
     public void create_newUser_validDto_returnsDtoWithSavedValues() {
         //given
         List<TreatDto> treatsInEnteredDto = new ArrayList<>(Arrays.asList(ObjectFactory.TreatDto_userId(1L), ObjectFactory.TreatDto_id_name_userId(2L, "second", 1L)));
-        UserDto enterDto = ObjectFactory.UserDto();
-        enterDto.setTreatDtos(treatsInEnteredDto);
+        UserDto enteredDto = ObjectFactory.UserDto();
+        enteredDto.setTreatDtos(treatsInEnteredDto);
         User user = ObjectFactory.User();
         List<Treat> treatsFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
         user.setTreats(treatsFromUser);
@@ -53,16 +53,34 @@ public class UserServiceImplTest {
         UserDto returnedDto = ObjectFactory.UserDto();
 
         //when
-        when(userMapper.toTreatEntities(enterDto.getTreatDtos())).thenReturn(treatsFromUser);
-        when(userMapper.toEntity(enterDto)).thenReturn(user);
+        when(userMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
+        when(userMapper.toEntity(enteredDto)).thenReturn(user);
         when(userRepo.save(user)).thenReturn(savedUser);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
         when(userMapper.toTreatDtos(savedUser.getTreats())).thenReturn(treatsInEnteredDto);
 
-        UserDto testedDto = service.create(enterDto);
+        UserDto testedDto = service.create(enteredDto);
         //then
         assertThat(testedDto).isNotNull();
-        assertThat(testedDto.getTreatDtos()).isEqualTo(enterDto.getTreatDtos());
+        assertThat(testedDto.getTreatDtos()).isEqualTo(enteredDto.getTreatDtos());
+        for (int i = 0; i < testedDto.getTreatDtos().size(); i++) {
+            assertThat(testedDto.getTreatDtos().get(i)).isEqualToComparingOnlyGivenFields(enteredDto.getTreatDtos().get(i), "id", "name", "amount", "increaseBy", "pic");
+            assertThat(testedDto.getTreatDtos().get(i).getUserId()).isEqualTo(enteredDto.getTreatDtos().get(i).getUserId());
+        }
+    }
+
+    @Test
+    public void create_userHasNullTreats_returnEmptyList() {
+        //given
+        UserDto enteredDto = ObjectFactory.UserDto();
+        enteredDto.setTreatDtos(null);
+        User user = ObjectFactory.User();
+        List<Treat> treatsFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
+        user.setTreats(treatsFromUser);
+
+        User savedUser = ObjectFactory.User();
+        UserDto returnedDto = ObjectFactory.UserDto();
+        //TODO test what happens if User with empty list is given
     }
 
     @Test
@@ -84,6 +102,10 @@ public class UserServiceImplTest {
 
         //then
         assertThat(testedDto).isNotNull();
-        assertThat(testedDto.getTreatDtos()).isEqualTo(userFromDb.getTreats());
+        assertThat(testedDto.getTreatDtos()).hasSameSizeAs(userFromDb.getTreats());
+        for (int i = 0; i < testedDto.getTreatDtos().size(); i++) {
+            assertThat(testedDto.getTreatDtos().get(i)).isEqualToComparingOnlyGivenFields(userFromDb.getTreats().get(i), "id", "name", "amount", "increaseBy", "pic");
+            assertThat(testedDto.getTreatDtos().get(i).getUserId()).isEqualTo(userFromDb.getTreats().get(i).getUser().getId());
+        }
     }
 }

@@ -10,7 +10,9 @@ import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.dto.UserDto;
 import treat_app.web_service.service.mapper.UserMapper;
 
+import java.util.Collections;
 import java.util.List;
+import java.util.Objects;
 
 @Service
 @AllArgsConstructor
@@ -20,8 +22,12 @@ public class UserServiceImpl implements UserService {
     private UserMapper userMapper;
 
     @Override
-    public UserDto create(UserDto userDto) { //v2
+    public UserDto create(UserDto userDto) { //v3
+        if (Objects.isNull(userDto.getTreatDtos())) {
+            userDto.setTreatDtos(Collections.emptyList());
+        }
         List<Treat> treats = userMapper.toTreatEntities(userDto.getTreatDtos());
+
         User user = userMapper.toEntity(userDto);
         user.setTreats(treats);
 
@@ -43,5 +49,9 @@ public class UserServiceImpl implements UserService {
         returnedDto.setTreatDtos(treatDtos);
 
         return returnedDto;
+    }
+
+    private List<Object> returnEmptyList(List<Object> list) {
+        return list.isEmpty() ? Collections.emptyList() : list;
     }
 }

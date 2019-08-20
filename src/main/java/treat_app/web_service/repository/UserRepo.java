@@ -16,5 +16,4 @@ public interface UserRepo extends CrudRepository<User, Long> {
 
     @Override
     List<User> findAll();
-
 }
