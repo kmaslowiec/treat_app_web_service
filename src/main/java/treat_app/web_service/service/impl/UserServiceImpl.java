@@ -48,8 +48,8 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getByid(Long id) { //v2
         User userFromDb = userRepo.findByIdOrThrow(id);
-
-        List<TreatDto> treatDtos = userMapper.toTreatDtos(userFromDb.getTreats());
+        List<Treat> treats = treatRepo.findAllByUser(userFromDb);
+        List<TreatDto> treatDtos = userMapper.toTreatDtos(treats);
         UserDto returnedDto = userMapper.toDto(userFromDb);
         returnedDto.setTreatDtos(treatDtos);
 
