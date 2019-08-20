@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import treat_app.web_service.ObjectFactory;
 import treat_app.web_service.entity.Treat;
 import treat_app.web_service.entity.User;
+import treat_app.web_service.repository.TreatRepo;
 import treat_app.web_service.repository.UserRepo;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.dto.UserDto;
@@ -32,6 +33,9 @@ public class UserServiceImplTest {
     @Mock
     private UserMapper userMapper;
 
+    @Mock
+    private TreatRepo treatRepo;
+
     @InjectMocks
     private UserServiceImpl service;
 
@@ -48,6 +52,7 @@ public class UserServiceImplTest {
         enteredDto.setTreatDtos(treatsInEnteredDto);
         User user = ObjectFactory.User();
         List<Treat> treatsFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
+        List<Treat> returnedTreats = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
         user.setTreats(treatsFromUser);
 
         User savedUser = ObjectFactory.User();
@@ -55,6 +60,7 @@ public class UserServiceImplTest {
 
         //when
         when(userMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
+        when(treatRepo.saveAll(treatsFromUser)).thenReturn(returnedTreats);
         when(userMapper.toEntity(enteredDto)).thenReturn(user);
         when(userRepo.save(user)).thenReturn(savedUser);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
