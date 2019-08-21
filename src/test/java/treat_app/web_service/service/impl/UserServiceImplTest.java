@@ -102,7 +102,7 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void getByid_validLong_returnsUserDto() {
+    public void getByid_validLongId_returnsUserDto() {
         //given
         User userFromDb = ObjectFactory.User();
         List<Treat> treatsFromDb = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(userFromDb), ObjectFactory.Treat_id_name_user(2L, "second", userFromDb)));
@@ -134,5 +134,26 @@ public class UserServiceImplTest {
 
         //when-then
         service.getByid(1L);
+    }
+
+    @Test
+    public void getByid_validLongId_userHasAnEmpytTreats() {
+        //given
+        User userFromDb = ObjectFactory.User();
+        List<Treat> treatsFromDb = Collections.emptyList();
+        List<TreatDto> dtosFromUser = Collections.emptyList();
+        UserDto returnedDto = ObjectFactory.UserDto();
+        returnedDto.setTreatDtos(dtosFromUser);
+
+        //when
+        when(userRepo.findByIdOrThrow(1L)).thenReturn(userFromDb);
+        when(treatRepo.findAllByUser(userFromDb)).thenReturn(treatsFromDb);
+        when(userMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
+        when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
+
+        UserDto testedDto = service.getByid(1L);
+
+        //then
+        assertThat(testedDto.getTreatDtos()).isEmpty();
     }
 }
