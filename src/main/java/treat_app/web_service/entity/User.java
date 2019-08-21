@@ -24,6 +24,6 @@ public class User {
     private String password;
 
     @ToString.Exclude
-    @OneToMany(mappedBy = "user")
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "user")
     private List<Treat> treats;
 }

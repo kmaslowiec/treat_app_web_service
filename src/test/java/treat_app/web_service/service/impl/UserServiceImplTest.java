@@ -151,9 +151,9 @@ public class UserServiceImplTest {
         when(userMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
-        UserDto testedDto = service.getByid(1L);
+        UserDto tested = service.getByid(1L);
 
         //then
-        assertThat(testedDto.getTreatDtos()).isEmpty();
+        assertThat(tested.getTreatDtos()).isEmpty();
     }
 }
