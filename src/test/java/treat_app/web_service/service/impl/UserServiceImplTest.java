@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import treat_app.web_service.ObjectFactory;
 import treat_app.web_service.entity.Treat;
 import treat_app.web_service.entity.User;
+import treat_app.web_service.exceptions.NotFoundException;
 import treat_app.web_service.repository.TreatRepo;
 import treat_app.web_service.repository.UserRepo;
 import treat_app.web_service.service.dto.TreatDto;
@@ -124,5 +125,14 @@ public class UserServiceImplTest {
             assertThat(testedDto.getTreatDtos().get(i)).isEqualToComparingOnlyGivenFields(treatsFromDb.get(i), "id", "name", "amount", "increaseBy", "pic");
             assertThat(testedDto.getTreatDtos().get(i).getUserId()).isEqualTo(treatsFromDb.get(i).getUser().getId());
         }
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getByid_nullId_returnsUserDto() {
+        //given
+        when(userRepo.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
+
+        //when-then
+        service.getByid(1L);
     }
 }
