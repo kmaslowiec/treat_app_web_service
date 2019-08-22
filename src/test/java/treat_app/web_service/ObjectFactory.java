@@ -7,10 +7,10 @@ import treat_app.web_service.service.dto.UserDto;
 
 public class ObjectFactory {
 
-    private static final Long ID = 1l;
+    private static final Long ID = 1L;
     private static final String PASS = "xxx";
     private static final String LOGIN = "konrad";
-    private static final String TREAD_NAME = "didn't smoke";
+    private static final String TREAD_NAME = "lust";
     private static final Float AMOUNT = 5.0f;
     private static final Float INC_BY = 2.5f;
     private static final int PIC = 1;
