@@ -46,7 +46,7 @@ public class UserRepoTest {
 
     @Test(expected = NotFoundException.class)
     public void findQuestionByIdOrThrow_ShouldThrowException_WhenInvalidIdIsPassed() {
-        //when
+        //when-given
         userRepo.findByIdOrThrow(1L);
     }
 }

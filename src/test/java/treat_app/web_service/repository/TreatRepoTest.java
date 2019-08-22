@@ -37,6 +37,7 @@ public class TreatRepoTest {
         Treat treat4 = ObjectFactory.Treat_id_name_user(5L, "wrath", user);
         Treat treat5 = ObjectFactory.Treat_id_name_user(6L, "envy", user);
         Treat treat6 = ObjectFactory.Treat_id_name_user(7L, "pride", user);
+
         //when
         entityManager.merge(user);
         List<Treat> treats = new ArrayList<>(Arrays.asList(treat, treat1, treat2, treat3, treat4, treat5, treat6));
@@ -52,5 +53,15 @@ public class TreatRepoTest {
             assertThat(tested.get(i)).isEqualToComparingFieldByField(treatsInDb.get(i));
         }
         assertThat(tested).hasSameSizeAs(treatsInDb);
+    }
+
+    @Test
+    public void findAllByUser_userIsNotFound_returnsEmptyList() {
+        //when
+        List<Treat> tested = treatRepo.findAllByUser(null);
+
+        //then
+        assertThat(tested).isEmpty();
+        assertThat(tested).isNotNull();
     }
 }
