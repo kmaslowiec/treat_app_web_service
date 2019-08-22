@@ -11,6 +11,7 @@ import treat_app.web_service.entity.Treat;
 import treat_app.web_service.entity.User;
 import treat_app.web_service.exceptions.NotFoundException;
 
+import javax.sql.DataSource;
 import java.util.Collections;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -18,6 +19,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserRepoTest {
+
+    private DataSource dataSource;
 
     @Autowired
     private TestEntityManager entityManager;
@@ -28,15 +31,14 @@ public class UserRepoTest {
     @Test
     public void findByIdThrow_validLongId_returnValidUser() {
         //given
-        User userInDb = ObjectFactory.User();
-        Treat treatInDb = ObjectFactory.Treat_user(userInDb);
-        entityManager.merge(userInDb);
-        userInDb.setTreats(Collections.singletonList(treatInDb));
-        entityManager.merge(treatInDb);
+        User user = ObjectFactory.User();
+        Treat treatInDb = ObjectFactory.Treat_user(user);
+        user.setTreats(Collections.singletonList(treatInDb));
+        User userInDb = entityManager.merge(user);
 
         //when
-        User tested = userRepo.findByIdOrThrow(userInDb.getId());
-        tested.setTreats(Collections.singletonList(treatInDb));
+        User tested = userRepo.findByIdOrThrow(user.getId());
+
         //then
         assertThat(tested).isNotNull();
         assertThat(tested).isEqualToComparingFieldByField(userInDb);
