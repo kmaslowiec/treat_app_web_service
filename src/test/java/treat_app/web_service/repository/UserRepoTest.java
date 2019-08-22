@@ -34,9 +34,9 @@ public class UserRepoTest {
         User user = ObjectFactory.User();
         Treat treatInDb = ObjectFactory.Treat_user(user);
         user.setTreats(Collections.singletonList(treatInDb));
-        User userInDb = entityManager.merge(user);
 
         //when
+        User userInDb = entityManager.merge(user);
         User tested = userRepo.findByIdOrThrow(user.getId());
 
         //then
