@@ -1,7 +1,6 @@
 package treat_app.web_service.service.impl;
 
 import lombok.AllArgsConstructor;
-import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Service;
 import treat_app.web_service.entity.Treat;
 import treat_app.web_service.entity.User;
@@ -18,7 +17,6 @@ import java.util.Objects;
 
 @Service
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserServiceImpl implements UserService {
 
     private UserRepo userRepo;
