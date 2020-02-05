@@ -1,21 +1,23 @@
 package treat_app.web_service.repository;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.orm.jpa.DataJpaTest;
 import org.springframework.boot.test.autoconfigure.orm.jpa.TestEntityManager;
 import org.springframework.test.context.junit4.SpringRunner;
+import treat_app.web_service.ObjectFactory;
+import treat_app.web_service.entity.Treat;
+import treat_app.web_service.entity.User;
 import treat_app.web_service.exceptions.NotFoundException;
 
-import javax.sql.DataSource;
+import java.util.Collections;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 @RunWith(SpringRunner.class)
 @DataJpaTest
 public class UserRepoTest {
-
-    private DataSource dataSource;
 
     @Autowired
     private TestEntityManager entityManager;
@@ -32,7 +34,7 @@ public class UserRepoTest {
 
         //when
         User userInDb = entityManager.merge(user);
-        User tested = userRepo.findByIdOrThrow(user.getId());
+        User tested = userRepo.findByIdOrThrow(userInDb.getId());
 
         //then
         assertThat(tested).isNotNull();
