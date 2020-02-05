@@ -13,6 +13,7 @@ import java.util.List;
 public interface UserMapper {
 
     UserDto toDto(User user);
+
     User toEntity(UserDto dto);
 
     List<TreatDto> toTreatDtos(List<Treat> treats);
