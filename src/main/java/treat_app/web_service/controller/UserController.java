@@ -30,9 +30,4 @@ public class UserController {
         UserDto fromDb = userService.getByid(id);
         return ResponseEntity.ok(fromDb);
     }
-
-    @GetMapping()
-    public String readTest() {
-        return "server works";
-    }
 }

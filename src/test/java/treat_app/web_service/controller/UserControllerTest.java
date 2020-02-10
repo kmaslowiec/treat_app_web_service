@@ -11,9 +11,11 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import treat_app.web_service.ObjectFactory;
+import treat_app.web_service.exceptions.NotFoundException;
 import treat_app.web_service.service.UserService;
 import treat_app.web_service.service.dto.UserDto;
 
+import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -51,6 +53,14 @@ public class UserControllerTest {
     }
 
     @Test
-    public void readTest() {
+    public void read_notExistingId_404httpsResponse() throws Exception {
+        //given
+        UserDto dto = ObjectFactory.UserDto();
+        //when
+        doThrow(new NotFoundException("")).when(userService).getByid(dto.getId());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", 1)
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
+                //then
+                .andExpect(status().isNotFound());
     }
 }
