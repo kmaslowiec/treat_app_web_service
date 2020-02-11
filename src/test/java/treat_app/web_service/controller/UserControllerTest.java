@@ -1,6 +1,5 @@
 package treat_app.web_service.controller;
 
-
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,11 +16,12 @@ import treat_app.web_service.service.dto.UserDto;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 @RunWith(SpringRunner.class)
-@WebMvcTest(value = UserController.class, secure = false)
+@WebMvcTest(value = UserController.class)
 public class UserControllerTest {
 
     @Autowired
@@ -31,7 +31,34 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    public void addUser() {
+    public void addUser_validUseWithLoginAndPassword_201httpsResponse() throws Exception {
+        //given
+        UserDto insertDto = ObjectFactory.UserDto();
+        insertDto.setId(null);
+        UserDto returnedDto = ObjectFactory.UserDto();
+        //when
+        when(userService.create(insertDto)).thenReturn(returnedDto);
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/user")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
+                //then
+                .andExpect(status().isCreated())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$.id").value(returnedDto.getId()))
+                .andExpect(jsonPath("$.userLogin").value(returnedDto.getUserLogin()))
+                .andExpect(jsonPath("$.userLogin").value(returnedDto.getUserLogin()))
+                .andExpect(jsonPath("$.treatDtos").value(returnedDto.getTreatDtos()));
+    }
+
+    @Test
+    public void addUser_userIdIsNotNUll_400httpsResponse() throws Exception {
+        //given
+        UserDto insertDto = ObjectFactory.UserDto();
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/user")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("id-error", "The id has to be null and it is " + insertDto.getId()));
     }
 
     @Test
@@ -40,7 +67,6 @@ public class UserControllerTest {
         UserDto dto = ObjectFactory.UserDto();
         //when
         when(userService.getByid(1L)).thenReturn(dto);
-        System.out.print(Converter.asJsonString(dto));
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
                 //then
