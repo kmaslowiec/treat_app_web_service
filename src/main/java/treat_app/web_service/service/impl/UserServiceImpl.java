@@ -9,6 +9,7 @@ import treat_app.web_service.repository.UserRepo;
 import treat_app.web_service.service.UserService;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.dto.UserDto;
+import treat_app.web_service.service.mapper.TreatMapper;
 import treat_app.web_service.service.mapper.UserMapper;
 
 import java.util.Collections;
@@ -22,19 +23,23 @@ public class UserServiceImpl implements UserService {
     private UserRepo userRepo;
     private TreatRepo treatRepo;
     private UserMapper userMapper;
+    private TreatMapper treatMapper;
 
     @Override
     public UserDto create(UserDto userDto) {
         if (Objects.isNull(userDto.getTreatDtos())) {
             userDto.setTreatDtos(Collections.emptyList());
         }
-        List<Treat> treats = userMapper.toTreatEntities(userDto.getTreatDtos());
-        User user = userMapper.toEntity(userDto);
-        User savedUser = userRepo.save(user);
-        treats.forEach(a -> a.setUser(savedUser));
+        List<Treat> treats = treatMapper.toTreatEntities(userDto.getTreatDtos());
         List<Treat> savedTreats = (List<Treat>) treatRepo.saveAll(treats);
+
+        User user = userMapper.toEntity(userDto);
+        user.setTreats(savedTreats);
+
+        User savedUser = userRepo.save(user);
+
         UserDto returnedDto = userMapper.toDto(savedUser);
-        List<TreatDto> treatDtos = userMapper.toTreatDtos(savedTreats);
+        List<TreatDto> treatDtos = treatMapper.toTreatDtos(savedUser.getTreats());
         returnedDto.setTreatDtos(treatDtos);
 
         return returnedDto;
@@ -44,7 +49,7 @@ public class UserServiceImpl implements UserService {
     public UserDto getByid(Long id) {
         User userFromDb = userRepo.findByIdOrThrow(id);
         List<Treat> treats = treatRepo.findAllByUser(userFromDb);
-        List<TreatDto> treatDtos = userMapper.toTreatDtos(treats);
+        List<TreatDto> treatDtos = treatMapper.toTreatDtos(treats);
         UserDto returnedDto = userMapper.toDto(userFromDb);
         returnedDto.setTreatDtos(treatDtos);
 

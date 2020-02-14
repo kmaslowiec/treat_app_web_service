@@ -15,6 +15,7 @@ import treat_app.web_service.repository.TreatRepo;
 import treat_app.web_service.repository.UserRepo;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.dto.UserDto;
+import treat_app.web_service.service.mapper.TreatMapper;
 import treat_app.web_service.service.mapper.UserMapper;
 
 import java.util.ArrayList;
@@ -35,6 +36,9 @@ public class UserServiceImplTest {
     private UserMapper userMapper;
 
     @Mock
+    private TreatMapper treatMapper;
+
+    @Mock
     private TreatRepo treatRepo;
 
     @InjectMocks
@@ -46,39 +50,34 @@ public class UserServiceImplTest {
     }
 
     @Test
-    public void create_validDtoWuthNullIdAndNotAssignedTreats_returnsDtoWithSavedUserAndTreatUserIds() {
+    public void create_newUser_validDto_returnsDtoWithSavedValues() {
         //given
-        List<TreatDto> treatsInEnteredDto = new ArrayList<>(Arrays.asList(ObjectFactory.TreatDto_userId(null),
-                ObjectFactory.TreatDto_id_name_userId(2L, "second", null)));
+        List<TreatDto> treatsInEnteredDto = new ArrayList<>(Arrays.asList(ObjectFactory.TreatDto_userId(1L), ObjectFactory.TreatDto_id_name_userId(2L, "second", 1L)));
         UserDto enteredDto = ObjectFactory.UserDto();
         enteredDto.setTreatDtos(treatsInEnteredDto);
         User user = ObjectFactory.User();
-        user.setId(null);
-        List<Treat> treatsFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(null), ObjectFactory.Treat_id_name_user(2L, "second",
-                null)));
+        List<Treat> treatsFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
+        List<Treat> returnedTreats = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
         user.setTreats(treatsFromUser);
-        List<Treat> treatsFromDb = new ArrayList<>(Arrays.asList(ObjectFactory.Treat_user(user), ObjectFactory.Treat_id_name_user(2L, "second", user)));
+
         User savedUser = ObjectFactory.User();
-        List<TreatDto> treatsDtosFromTreatsDb = new ArrayList<>(Arrays.asList(ObjectFactory.TreatDto_userId(savedUser.getId()),
-                ObjectFactory.TreatDto_id_name_userId(2L, "second", savedUser.getId())));
         UserDto returnedDto = ObjectFactory.UserDto();
-        returnedDto.setTreatDtos(treatsDtosFromTreatsDb);
 
         //when
-        when(userMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
+        when(treatMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
+        when(treatRepo.saveAll(treatsFromUser)).thenReturn(returnedTreats);
         when(userMapper.toEntity(enteredDto)).thenReturn(user);
         when(userRepo.save(user)).thenReturn(savedUser);
-        when(treatRepo.saveAll(treatsFromUser)).thenReturn(treatsFromDb);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
-        when(userMapper.toTreatDtos(treatsFromDb)).thenReturn(treatsDtosFromTreatsDb);
+        when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(treatsInEnteredDto);
 
         UserDto testedDto = service.create(enteredDto);
-
         //then
         assertThat(testedDto).isNotNull();
+        assertThat(testedDto.getTreatDtos()).isEqualTo(enteredDto.getTreatDtos());
         for (int i = 0; i < testedDto.getTreatDtos().size(); i++) {
             assertThat(testedDto.getTreatDtos().get(i)).isEqualToComparingOnlyGivenFields(enteredDto.getTreatDtos().get(i), "id", "name", "amount", "increaseBy", "pic");
-            assertThat(testedDto.getTreatDtos().get(i).getUserId()).isEqualTo(savedUser.getId());
+            assertThat(testedDto.getTreatDtos().get(i).getUserId()).isEqualTo(enteredDto.getTreatDtos().get(i).getUserId());
         }
     }
 
@@ -94,11 +93,11 @@ public class UserServiceImplTest {
         UserDto returnedDto = ObjectFactory.UserDto();
 
         //when
-        when(userMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
+        when(treatMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
         when(userMapper.toEntity(enteredDto)).thenReturn(user);
         when(userRepo.save(user)).thenReturn(savedUser);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
-        when(userMapper.toTreatDtos(savedUser.getTreats())).thenReturn(Collections.emptyList());
+        when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(Collections.emptyList());
 
         UserDto testedDto = service.create(enteredDto);
 
@@ -118,7 +117,7 @@ public class UserServiceImplTest {
         //when
         when(userRepo.findByIdOrThrow(1L)).thenReturn(userFromDb);
         when(treatRepo.findAllByUser(userFromDb)).thenReturn(treatsFromDb);
-        when(userMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
+        when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
         UserDto testedDto = service.getByid(1L);
@@ -153,7 +152,7 @@ public class UserServiceImplTest {
         //when
         when(userRepo.findByIdOrThrow(1L)).thenReturn(userFromDb);
         when(treatRepo.findAllByUser(userFromDb)).thenReturn(treatsFromDb);
-        when(userMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
+        when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
         UserDto tested = service.getByid(1L);
