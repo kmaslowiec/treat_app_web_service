@@ -59,7 +59,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
                 //then
                 .andExpect(status().isBadRequest())
-                .andExpect(header().string("id-error", "The id has to be null and it is " + insertDto.getId()));
+                .andExpect(header().string("id-error", "The id has to be null"));
     }
 
     @Test

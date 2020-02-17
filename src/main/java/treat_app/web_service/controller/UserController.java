@@ -28,7 +28,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> addUser(@Validated @RequestBody UserDto userDto) throws URISyntaxException {
         if (userDto.getId() != null) {
-            return new ResponseEntity<>(userDto, HeaderFactory.idNotNUll(userDto.getId()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userDto, HeaderFactory.idNotNull(userDto.getId()), HttpStatus.BAD_REQUEST);
         }
         UserDto savedUser = userService.create(userDto);
 

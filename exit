@@ -1,0 +1,228 @@
+[33mcommit 69737c748013ff142cc0bcca9816f7c2be637978[m[33m ([m[1;36mHEAD -> [m[1;32mfeature/update_user_TDD_green_cycle[m[33m, [m[1;31morigin/develop[m[33m, [m[1;31morigin/HEAD[m[33m, [m[1;32mdevelop[m[33m)[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Mon Feb 17 16:40:08 2020 +0100
+
+    merge with the TDD red cycle.
+
+[33mcommit 098489ecd4efb15132a444c612283d6b77ffa086[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Mon Feb 17 16:39:54 2020 +0100
+
+    merge with the TDD red cycle.
+
+[33mcommit 5f035bd41949c231ca9eb2f4b8bc05d4a823d052[m
+Merge: 2bc370f d4794ff
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Mon Feb 17 16:04:44 2020 +0100
+
+    Merge branch 'bugfix/treat_list_mapping_moved_to_treat_mapper' into develop
+    
+    # Conflicts:
+    #       src/main/java/treat_app/web_service/service/impl/UserServiceImpl.java
+    #       src/test/java/treat_app/web_service/service/impl/UserServiceImplTest.java
+
+[33mcommit 2bc370fecc0b794df176b05c52d18e9f4a010324[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Mon Feb 17 15:52:42 2020 +0100
+
+    bugfix: The proper order of saving the treats and the user.
+    The User id in the treats is added after the User is saved in the db. The test refactored.
+    The test create_validDtoWuthNullIdAndNotAssignedTreats_returnsDtoWithSavedUserAndTreatUserIds refactored to cover a new validation.
+
+[33mcommit d4794ff06146c6fb6f2d69dd5225fdb8251edd61[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Fri Feb 14 14:32:17 2020 +0100
+
+    bugfix: toTreatDtos and toTreatEntities moved to TreatMapper. Tests refactored.
+
+[33mcommit 0724c413a33d81ab33e290ecd99464941c09c8ce[m
+Merge: ba505dc 406e759
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Tue Feb 11 13:53:59 2020 +0100
+
+    Merge branch 'feature/test_usercontroller_post_get' into develop
+
+[33mcommit 406e759956a5d1e2d9d8e69e12d063b8d6b2dc6d[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Tue Feb 11 13:53:28 2020 +0100
+
+    UserControllerTest and UserController: Id has to be null to create a User. HeaderFactory aded.
+    Also I have disabled the import wild cards and increased the line wrapper to 150 signs.
+
+[33mcommit 953bc95ff44c3fce5651da09d51732d3e2847f8c[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Mon Feb 10 14:54:06 2020 +0100
+
+    UserControllerTest: Get test impl
+
+[33mcommit a4c6f9553e45474de8400b517125c47bd68b8753[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Mon Feb 10 13:49:32 2020 +0100
+
+    UserControllerTest: https200 test with null treats
+    JASON Converter impl
+
+[33mcommit ba505dce790c076743931c91a2ecd13452d4337e[m
+Merge: 085f638 6df377d
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Mon Feb 10 13:44:11 2020 +0100
+
+    Merge branch 'feature/docker_composer' into develop
+
+[33mcommit 6df377ddd8c7a7500b4d04126d75c4930be0cd09[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Wed Feb 5 12:47:03 2020 +0100
+
+    minor change
+
+[33mcommit e763ab30e09adb226412ebac7279a67ab88fecbf[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Wed Feb 5 12:46:14 2020 +0100
+
+    Docker setup // Dockerfile and startup.sh impl. Port changed to 8090
+
+[33mcommit e0fa02b67f03b724df5502aed339f25d0d81640a[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Wed Feb 5 12:09:54 2020 +0100
+
+    Setup after break 0.4 // UserRepoTest refactor
+
+[33mcommit 085f6382242ce7b0b26cf2453b1fdef38e613424[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Wed Feb 5 11:42:22 2020 +0100
+
+    Setup after break 0.3 // commit before gitflow
+
+[33mcommit 099ffa1abe63a67d89e3498a8c8ee9b96bfbb495[m
+Author: Konrad <kmaslowiec@gmail.com>
+Date:   Wed Feb 5 11:39:38 2020 +0100
+
+    Setup after break 0.2 // commit before gitflow
+
+[33mcommit 39f1d7f970e85e137f86415aa4fbdf5d5d4f2313[m
+Merge: dd05e6d 3e12a64
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Fri Aug 23 15:36:15 2019 +0200
+
+    Merge branch 'feature/userController_addUser_endpoint' into develop
+
+[33mcommit 3e12a640384e375158a99b2a3b208f99f6ae3334[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Fri Aug 23 15:36:06 2019 +0200
+
+    userController: addUser and findUser impl
+
+[33mcommit add5c655bcd586482ff7801ca48f6163df3ee4ab[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Fri Aug 23 15:35:26 2019 +0200
+
+    userController: addUser and findUser impl
+
+[33mcommit dd05e6d387422e44797b08b4cf2c977fc662f457[m
+Merge: 6354dcb b7d21e8
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Fri Aug 23 14:17:15 2019 +0200
+
+    Merge branch 'feature/findAllByUser_tests' into develop
+
+[33mcommit b7d21e8485aa4ee696cc94dbf429f4d1cfd51c92[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Thu Aug 22 15:31:41 2019 +0200
+
+    findAllByUser_userIsNotFound_returnsEmptyList.
+    Double check of JPA in the repo. For learning purposes.
+
+[33mcommit 18e1730a61e4e643b0042ad8dd783a11a282c0af[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Thu Aug 22 15:09:54 2019 +0200
+
+    TreatRepoTest: findAllByUser_dbHasTreatsAssignedToUser_returnsTreatsOfTheUser.
+    ObjectFactory: treat name was changed
+
+[33mcommit 6354dcb771660627f8e8ea81e4c1702a93f81fcd[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Thu Aug 22 14:50:19 2019 +0200
+
+    TreatRepo: findAllByUser_dbHasTreatAssignedToUser_returnsTreatThatIsAssignedToUser.
+
+[33mcommit d07a9417c39b809d8a78edf18e6b66dbd220098f[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Thu Aug 22 14:18:47 2019 +0200
+
+    BugFix: There is no need to setup the H2 DB for tests using application.properties. The embedded H@ Db is included in @DataJpaTest Annotation.
+
+[33mcommit 11991d3a14fbe7318d5ef7a99118f02aca6037da[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Wed Aug 21 16:39:55 2019 +0200
+
+    UserRepo: getById tested
+
+[33mcommit 67ee43d53fe6944075b3f196040ab29d8586c590[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Wed Aug 21 11:57:19 2019 +0200
+
+    UserServiceImplTest: getById, if the User has an empty treats tested
+
+[33mcommit 88023ac73007cedcc13e4dff5aa3463d4c456f4e[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Wed Aug 21 11:47:09 2019 +0200
+
+    UserServiceImplTest: getById user not found tested
+
+[33mcommit a8bfeb0da12536793e5b97082b881fd14221b7a7[m
+Merge: 6b1b117 996a5f3
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Tue Aug 20 16:24:35 2019 +0200
+
+    Merge branch 'feature/UserServiceImpl_saving_and_read_treats' into develop
+
+[33mcommit 996a5f35f05d8c9fd47f522329a658b406e50818[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Tue Aug 20 16:24:17 2019 +0200
+
+    UserServiceImpl: create and getById takes treats from DB. Tested for null
+
+[33mcommit 78b4c601c60145e3eaa9c9733e3b75691d30c83c[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Tue Aug 20 15:22:47 2019 +0200
+
+    UserServiceImpl: Treats saved in create method
+
+[33mcommit 6b1b117cdbd9c4b359f2de8a2cd76391c43d6e99[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Tue Aug 20 14:36:38 2019 +0200
+
+    TreatService currently not required. Treats will be saved in UserServiceImpl
+
+[33mcommit 88b7fbeb04d516b48d143605b6242d6e4aac0860[m
+Merge: 972fce7 68c4cf2
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Tue Aug 20 13:05:55 2019 +0200
+
+    Merge branch 'feature/user_service_testing' into develop
+
+[33mcommit 68c4cf28c515f8f886dd2f30b7afb04e8a7c10e2[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Tue Aug 20 13:05:21 2019 +0200
+
+    UserService: create checked for an empty list of treats, null treats returns an empty list. Before testing
+
+[33mcommit 4150163dd040e91086cb56002c49e0e26b7a83ba[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Tue Aug 20 12:28:49 2019 +0200
+
+    UserService: create checked for an empty list of treats, null treats returns an empty list. Before testing
+
+[33mcommit 429928d0828ca55876c01a9fccfcb2c7b13f4166[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Thu Aug 8 13:34:58 2019 +0200
+
+    infinite loop of toString calls fixed
+
+[33mcommit b8f013fb9ad600e8686231aac3803cc91eacc6b2[m
+Author: Konrad Maslowiec <kmaslowiec@gmail.com>
+Date:   Wed Aug 7 15:11:18 2019 +0200
+
+    getById service v2 impl
+
+[33mcommit d8dad60ae55f1e7cb9cfdff8f2d44
