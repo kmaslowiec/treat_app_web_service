@@ -1,5 +1,6 @@
 package treat_app.web_service.controller;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -88,5 +89,37 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
                 //then
                 .andExpect(status().isNotFound());
+    }
+
+    @Test
+    @Ignore
+    public void updateUser_userIdIsNotNull_200httpsResponse() throws Exception {
+        //given
+        UserDto insertDto = ObjectFactory.UserDto();
+        UserDto returnedDto = ObjectFactory.UserDto();
+        //when
+        when(userService.update(insertDto)).thenReturn(returnedDto);
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/user")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
+                //then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$.id").value(returnedDto.getId()))
+                .andExpect(jsonPath("$.userLogin").value(returnedDto.getUserLogin()))
+                .andExpect(jsonPath("$.userLogin").value(returnedDto.getUserLogin()))
+                .andExpect(jsonPath("$.treatDtos").value(returnedDto.getTreatDtos()));
+    }
+
+    @Test
+    @Ignore
+    public void updateUser_userIdIsNull_400httpsResponse() throws Exception {
+        //given
+        UserDto insertDto = ObjectFactory.UserDto();
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.put("/api/user")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("id-error", "The id cannot be null"));
     }
 }
