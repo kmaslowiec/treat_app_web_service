@@ -42,11 +42,11 @@ public class UserController {
     }
 
     @PutMapping
-    public ResponseEntity<UserDto> updateUser(@Validated @RequestBody UserDto userDto) throws URISyntaxException {
+    public ResponseEntity<UserDto> updateUser(@Validated @RequestBody UserDto userDto) {
         if (userDto.getId() == null) {
             return new ResponseEntity<>(userDto, HeaderFactory.idIsNull(userDto.getId()), HttpStatus.BAD_REQUEST);
         }
-
-        return null;
+        UserDto updatedDto = userService.update(userDto);
+        return ResponseEntity.ok(updatedDto);
     }
 }

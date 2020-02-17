@@ -1,6 +1,5 @@
 package treat_app.web_service.controller;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,7 +91,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @Ignore
     public void updateUser_userIdIsNotNull_200httpsResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
@@ -111,10 +109,10 @@ public class UserControllerTest {
     }
 
     @Test
-    @Ignore
     public void updateUser_userIdIsNull_400httpsResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
+        insertDto.setId(null);
         //when
         mockMvc.perform(MockMvcRequestBuilders.put("/api/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
