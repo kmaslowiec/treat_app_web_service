@@ -34,6 +34,10 @@ public class ObjectFactory {
     }
 
     //Treat
+    public static Treat Treat_id_user(long id, User user) {
+        return Treat.builder().id(id).name(TREAD_NAME).amount(AMOUNT).increaseBy(INC_BY).pic(PIC).user(user).build();
+    }
+
     public static Treat Treat_user(User user) {
         return Treat.builder().id(ID).name(TREAD_NAME).amount(AMOUNT).increaseBy(INC_BY).pic(PIC).user(user).build();
     }

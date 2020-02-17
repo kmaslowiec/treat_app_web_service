@@ -1,6 +1,7 @@
 package treat_app.web_service.service.impl;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -65,7 +66,6 @@ public class UserServiceImplTest {
 
         //when
         when(treatMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
-        when(treatRepo.saveAll(treatsFromUser)).thenReturn(returnedTreats);
         when(userMapper.toEntity(enteredDto)).thenReturn(user);
         when(userRepo.save(user)).thenReturn(savedUser);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
@@ -159,5 +159,67 @@ public class UserServiceImplTest {
 
         //then
         assertThat(tested.getTreatDtos()).isEmpty();
+    }
+
+    @Test
+    @Ignore
+    public void update_userDtoHasId_returnsUpdatedDto() {
+        int numOfTreats = 3;
+        //given
+        UserDto insertedUserDto = ObjectFactory.UserDto();
+        User insertedUser = ObjectFactory.User();
+        UserDto savedUserDto = ObjectFactory.UserDto();
+        User savedUser = ObjectFactory.User();
+        List<TreatDto> treatDtos = new ArrayList<>();
+        for (long i = 1; i <= numOfTreats; i++) {
+            treatDtos.add(ObjectFactory.TreatDto_userId(i));
+        }
+        List<Treat> treats = new ArrayList<>();
+        for (long i = 1; i <= numOfTreats; i++) {
+            treats.add(ObjectFactory.Treat_id_user(i, insertedUser));
+        }
+        insertedUserDto.setTreatDtos(treatDtos);
+        insertedUser.setTreats(treats);
+        savedUser.setTreats(treats);
+        savedUserDto.setTreatDtos(treatDtos);
+
+        //when
+        // Check if the id exists in the DB, if yes, continue, if no, throw notFoundException.
+        when(userRepo.existsById(insertedUserDto.getId())).thenReturn(true);
+        // Service checks if the Treats list is null, if yes an empty list is added, if not, TreatDtos are mapped to Treats
+        when(treatMapper.toTreatEntities(treatDtos)).thenReturn(treats);
+        // The dto is mapped to entity
+        when(userMapper.toEntity(insertedUserDto)).thenReturn(insertedUser);
+        // The treats are added to entity
+        // The entity and the treats are saved in db.
+        when(userRepo.save(insertedUser)).thenReturn(savedUser);
+        // The treats dtos are mapped to treats entities
+        when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(savedUserDto.getTreatDtos());
+        // The user entity is mapped to dto
+        when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
+        // The treats dtos are added to entity
+        // service returns the dto with treats if not empty
+
+        //then
+        UserDto testedDto = service.update(insertedUserDto);
+
+        assertThat(testedDto).isNotNull();
+        assertThat(testedDto.getTreatDtos()).isEqualTo(insertedUserDto.getTreatDtos());
+        for (int i = 0; i < testedDto.getTreatDtos().size(); i++) {
+            assertThat(testedDto.getTreatDtos().get(i)).isEqualToComparingOnlyGivenFields(insertedUserDto.getTreatDtos().get(i), "id", "name", "amount", "increaseBy", "pic");
+            assertThat(testedDto.getTreatDtos().get(i).getUserId()).isEqualTo(insertedUserDto.getTreatDtos().get(i).getUserId());
+        }
+    }
+
+    @Test(expected = NotFoundException.class)
+    @Ignore
+    public void update_userIdNotFound_throwsNotFoundException() {
+        UserDto insertedUserDto = ObjectFactory.UserDto();
+        User insertedUser = ObjectFactory.User();
+        //given
+        when(userRepo.save(insertedUser)).thenThrow(NotFoundException.class);
+
+        //when-then
+        service.update(insertedUserDto);
     }
 }

@@ -7,4 +7,6 @@ public interface UserService {
     UserDto create(UserDto user);
 
     UserDto getByid(Long id);
+
+    UserDto update(UserDto userDto);
 }
