@@ -63,7 +63,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void read_validIdWithNUllTreats_200httpsResponse() throws Exception {
+    public void readUser_validIdWithNUllTreats_200httpsResponse() throws Exception {
         //given
         UserDto dto = ObjectFactory.UserDto();
         //when
@@ -80,7 +80,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void read_notExistingId_404httpsResponse() throws Exception {
+    public void readUser_notExistingId_404httpsResponse() throws Exception {
         //given
         UserDto dto = ObjectFactory.UserDto();
         //when
