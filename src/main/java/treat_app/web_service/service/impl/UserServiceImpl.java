@@ -55,6 +55,15 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto userDto) {
-        return null;
+        User userInDb = userRepo.findByIdOrThrow(userDto.getId());
+        List<Treat> treatsInDto = (Objects.isNull(userDto.getTreatDtos())) ?
+                Collections.emptyList() : treatMapper.toTreatEntities(userDto.getTreatDtos());
+        User user = userMapper.toEntity(userDto);
+        user.setTreats(treatsInDto);
+        User savedUser = userRepo.save(user);
+        List<TreatDto> savedTreatDtos = treatMapper.toTreatDtos(savedUser.getTreats());
+        UserDto returnedUserDto = userMapper.toDto(savedUser);
+        returnedUserDto.setTreatDtos(savedTreatDtos);
+        return returnedUserDto;
     }
 }
