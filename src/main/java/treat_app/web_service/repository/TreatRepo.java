@@ -13,5 +13,5 @@ public interface TreatRepo extends CrudRepository<Treat, Long> {
     @Override
     <S extends Treat> Iterable<S> saveAll(Iterable<S> entities);
 
-    List<Treat> findAllByUser(User users);
+    List<Treat> findAllByUser(User user);
 }

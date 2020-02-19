@@ -69,6 +69,9 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteById(Long id) {
-
+        User user = userRepo.findByIdOrThrow(id);
+        List<Treat> treats = treatRepo.findAllByUser(user);
+        treatRepo.deleteAll(treats);
+        userRepo.deleteById(id);
     }
 }

@@ -1,6 +1,5 @@
 package treat_app.web_service.controller;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -123,7 +122,6 @@ public class UserControllerTest {
     }
 
     @Test
-    @Ignore
     public void deleteUserById_UserIdIsNotNull_204httpResponse() throws Exception {
         //when
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/user/{id}", 1L)
@@ -131,17 +129,5 @@ public class UserControllerTest {
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 //then
                 .andExpect(status().isNoContent());
-    }
-
-    @Test
-    @Ignore
-    public void deleteUserById_UserIdIsNull_400httpResponse() throws Exception {
-        //when
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/user/{id}", 1L)
-                .contentType(MediaType.APPLICATION_JSON_UTF8)
-                .accept(MediaType.APPLICATION_JSON_UTF8))
-                //then
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string("id-error", "The id cannot be null"));
     }
 }

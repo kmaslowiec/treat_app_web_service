@@ -27,7 +27,7 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> addUser(@Validated @RequestBody UserDto userDto) throws URISyntaxException {
+    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) throws URISyntaxException {
         if (userDto.getId() != null) {
             return new ResponseEntity<>(userDto, HeaderFactory.idHasToBeNull(userDto.getId()), HttpStatus.BAD_REQUEST);
         }
@@ -52,10 +52,8 @@ public class UserController {
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Long> deleteUserById(@Validated @PathVariable Long id) {
-        if (id == null) {
-            return new ResponseEntity<>(HeaderFactory.idCantBeNull(id), HttpStatus.BAD_REQUEST);
-        }
+    public ResponseEntity<Long> deleteUserById(@PathVariable Long id) {
+        userService.deleteById(id);
         return ResponseEntity.noContent().build();
     }
 }

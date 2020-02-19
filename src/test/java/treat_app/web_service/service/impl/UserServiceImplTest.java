@@ -1,7 +1,6 @@
 package treat_app.web_service.service.impl;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -246,25 +245,25 @@ public class UserServiceImplTest {
     }
 
     @Test
-    @Ignore
-    public void deleteById_UserWithIdExists_UserIsDeletedReturnsTruer() {
+    public void deleteById_UserWithIdExists_UserIsDeleted() {
         //given
         UserDto insertedUserDto = ObjectFactory.UserDto();
         User userInDb = ObjectFactory.User();
 
         //when-then
         when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenReturn(userInDb);
+        service.deleteById(insertedUserDto.getId());
         verify(userRepo).deleteById(userInDb.getId());
     }
 
     @Test(expected = NotFoundException.class)
-    @Ignore
     public void deleteById_UserWithIdDoesNotExist_throwNotFoundException() {
         //given
         UserDto insertedUserDto = ObjectFactory.UserDto();
 
         //when-then
         when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenThrow(NotFoundException.class);
+        service.deleteById(insertedUserDto.getId());
         verify(userRepo).deleteById(insertedUserDto.getId());
     }
 }
