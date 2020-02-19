@@ -53,6 +53,9 @@ public class UserController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Long> deleteUserById(@Validated @PathVariable Long id) {
-        return null;
+        if (id == null) {
+            return new ResponseEntity<>(HeaderFactory.idCantBeNull(id), HttpStatus.BAD_REQUEST);
+        }
+        return ResponseEntity.noContent().build();
     }
 }
