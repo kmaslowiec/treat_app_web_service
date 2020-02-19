@@ -5,15 +5,15 @@ import treat_app.web_service.util.MyStrings;
 
 public class HeaderFactory {
 
-    public static HttpHeaders idNotNull(Long id) {
+    public static HttpHeaders idHasToBeNull(Long id) {
         HttpHeaders head = new HttpHeaders();
-        head.add(MyStrings.ID_ERROR, MyStrings.ID_ERROR_NOT_NULL);
+        head.add(MyStrings.ID_ERROR, MyStrings.ID_ERROR_HAS_TO_BE_NULL);
         return head;
     }
 
-    public static HttpHeaders idIsNull(Long id) {
+    public static HttpHeaders idCantBeNull(Long id) {
         HttpHeaders head = new HttpHeaders();
-        head.add(MyStrings.ID_ERROR, MyStrings.ID_ERROR_NULL);
+        head.add(MyStrings.ID_ERROR, MyStrings.ID_ERROR_CANNOT_BE_NULL);
         return head;
     }
 }

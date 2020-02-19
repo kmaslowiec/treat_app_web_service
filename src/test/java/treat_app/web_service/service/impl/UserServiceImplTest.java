@@ -1,6 +1,7 @@
 package treat_app.web_service.service.impl;
 
 import org.junit.Before;
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -24,6 +25,7 @@ import java.util.Collections;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -203,13 +205,12 @@ public class UserServiceImplTest {
 
     @Test(expected = NotFoundException.class)
     public void update_userIdNotFound_throwsNotFoundException() {
+        //given
         UserDto insertedUserDto = ObjectFactory.UserDto();
         User insertedUser = ObjectFactory.User();
 
-        //given
-        when(userRepo.findByIdOrThrow(insertedUser.getId())).thenThrow(NotFoundException.class);
-
         //when-then
+        when(userRepo.findByIdOrThrow(insertedUser.getId())).thenThrow(NotFoundException.class);
         service.update(insertedUserDto);
     }
 
@@ -242,5 +243,28 @@ public class UserServiceImplTest {
 
         assertThat(testedDto).isNotNull();
         assertThat(testedDto.getTreatDtos()).isEmpty();
+    }
+
+    @Test
+    @Ignore
+    public void deleteById_UserWithIdExists_UserIsDeletedReturnsTruer() {
+        //given
+        UserDto insertedUserDto = ObjectFactory.UserDto();
+        User userInDb = ObjectFactory.User();
+
+        //when-then
+        when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenReturn(userInDb);
+        verify(userRepo).deleteById(userInDb.getId());
+    }
+
+    @Test(expected = NotFoundException.class)
+    @Ignore
+    public void deleteById_UserWithIdDoesNotExist_throwNotFoundException() {
+        //given
+        UserDto insertedUserDto = ObjectFactory.UserDto();
+
+        //when-then
+        when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenThrow(NotFoundException.class);
+        verify(userRepo).deleteById(insertedUserDto.getId());
     }
 }

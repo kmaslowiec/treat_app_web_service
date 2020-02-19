@@ -1,5 +1,6 @@
 package treat_app.web_service.controller;
 
+import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,7 +32,7 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    public void addUser_validUseWithLoginAndPassword_201httpsResponse() throws Exception {
+    public void addUser_validUseWithLoginAndPassword_201httpResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
         insertDto.setId(null);
@@ -50,7 +51,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void addUser_userIdIsNotNUll_400httpsResponse() throws Exception {
+    public void addUser_userIdIsNotNUll_400httpResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
         //when
@@ -62,7 +63,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void readUser_validIdWithNUllTreats_200httpsResponse() throws Exception {
+    public void readUser_validIdWithNUllTreats_200httpResponse() throws Exception {
         //given
         UserDto dto = ObjectFactory.UserDto();
         //when
@@ -79,19 +80,19 @@ public class UserControllerTest {
     }
 
     @Test
-    public void readUser_notExistingId_404httpsResponse() throws Exception {
+    public void readUser_notExistingId_404httpResponse() throws Exception {
         //given
-        UserDto dto = ObjectFactory.UserDto();
+        UserDto insertedDto = ObjectFactory.UserDto();
         //when
-        doThrow(new NotFoundException("")).when(userService).getByid(dto.getId());
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", 1)
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
+        doThrow(new NotFoundException("")).when(userService).getByid(insertedDto.getId());
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", insertedDto.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedDto)))
                 //then
                 .andExpect(status().isNotFound());
     }
 
     @Test
-    public void updateUser_userIdIsNotNull_200httpsResponse() throws Exception {
+    public void updateUser_userIdIsNotNull_200httpResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
         UserDto returnedDto = ObjectFactory.UserDto();
@@ -109,13 +110,36 @@ public class UserControllerTest {
     }
 
     @Test
-    public void updateUser_userIdIsNull_400httpsResponse() throws Exception {
+    public void updateUser_userIdIsNull_400httpResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
         insertDto.setId(null);
         //when
         mockMvc.perform(MockMvcRequestBuilders.put("/api/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string("id-error", "The id cannot be null"));
+    }
+
+    @Test
+    @Ignore
+    public void deleteUserById_UserIdIsNotNull_204httpResponse() throws Exception {
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/user/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                //then
+                .andExpect(status().isNoContent());
+    }
+
+    @Test
+    @Ignore
+    public void deleteUserById_UserIdIsNull_400httpResponse() throws Exception {
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/user/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
                 //then
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string("id-error", "The id cannot be null"));

@@ -66,4 +66,9 @@ public class UserServiceImpl implements UserService {
         returnedUserDto.setTreatDtos(savedTreatDtos);
         return returnedUserDto;
     }
+
+    @Override
+    public void deleteById(Long id) {
+
+    }
 }

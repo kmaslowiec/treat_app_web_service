@@ -4,6 +4,7 @@ import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -28,7 +29,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<UserDto> addUser(@Validated @RequestBody UserDto userDto) throws URISyntaxException {
         if (userDto.getId() != null) {
-            return new ResponseEntity<>(userDto, HeaderFactory.idNotNull(userDto.getId()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userDto, HeaderFactory.idHasToBeNull(userDto.getId()), HttpStatus.BAD_REQUEST);
         }
         UserDto savedUser = userService.create(userDto);
 
@@ -44,9 +45,14 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@Validated @RequestBody UserDto userDto) {
         if (userDto.getId() == null) {
-            return new ResponseEntity<>(userDto, HeaderFactory.idIsNull(userDto.getId()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userDto, HeaderFactory.idCantBeNull(userDto.getId()), HttpStatus.BAD_REQUEST);
         }
         UserDto updatedDto = userService.update(userDto);
         return ResponseEntity.ok(updatedDto);
+    }
+
+    @DeleteMapping("{id}")
+    public ResponseEntity<Long> deleteUserById(@Validated @PathVariable Long id) {
+        return null;
     }
 }
