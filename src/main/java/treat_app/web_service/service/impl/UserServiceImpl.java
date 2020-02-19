@@ -55,7 +55,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto update(UserDto userDto) {
-        User userInDb = userRepo.findByIdOrThrow(userDto.getId());
+        userRepo.findByIdOrThrow(userDto.getId());
         List<Treat> treatsInDto = (Objects.isNull(userDto.getTreatDtos())) ?
                 Collections.emptyList() : treatMapper.toTreatEntities(userDto.getTreatDtos());
         User user = userMapper.toEntity(userDto);
