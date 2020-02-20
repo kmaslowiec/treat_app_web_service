@@ -27,9 +27,9 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> addUser(@RequestBody UserDto userDto) throws URISyntaxException {
+    public ResponseEntity<UserDto> addUser(@Validated @RequestBody UserDto userDto) throws URISyntaxException {
         if (userDto.getId() != null) {
-            return new ResponseEntity<>(userDto, HeaderFactory.idHasToBeNull(userDto.getId()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userDto, HeaderFactory.idHasToBeNull(), HttpStatus.BAD_REQUEST);
         }
         UserDto savedUser = userService.create(userDto);
 
@@ -45,7 +45,7 @@ public class UserController {
     @PutMapping
     public ResponseEntity<UserDto> updateUser(@Validated @RequestBody UserDto userDto) {
         if (userDto.getId() == null) {
-            return new ResponseEntity<>(userDto, HeaderFactory.idCantBeNull(userDto.getId()), HttpStatus.BAD_REQUEST);
+            return new ResponseEntity<>(userDto, HeaderFactory.idCantBeNull(), HttpStatus.BAD_REQUEST);
         }
         UserDto updatedDto = userService.update(userDto);
         return ResponseEntity.ok(updatedDto);

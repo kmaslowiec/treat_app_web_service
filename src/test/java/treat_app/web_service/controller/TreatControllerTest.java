@@ -65,13 +65,13 @@ public class TreatControllerTest {
     @Test
     public void addTreat_treatDtoUserIdIsNull_400httpResponse() throws Exception {
         //given
-        TreatDto insertDto = ObjectFactory.TreatDto_userId(1L);
-        insertDto.setUserId(null);
+        TreatDto insertDto = ObjectFactory.TreatDto_userId(null);
+        insertDto.setId(null);
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/treat")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
                 //then
                 .andExpect(status().isBadRequest())
-                .andExpect(header().string(MyStrings.TREAT_ID_ERROR, MyStrings.TREAT_ID_CANNOT_BE_NULL));
+                .andExpect(header().string(MyStrings.TREAT_ID_ERROR, MyStrings.TREAT_USER_ID_CANNOT_BE_NULL));
     }
 }
