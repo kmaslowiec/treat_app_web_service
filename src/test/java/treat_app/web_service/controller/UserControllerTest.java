@@ -13,6 +13,7 @@ import treat_app.web_service.ObjectFactory;
 import treat_app.web_service.exceptions.NotFoundException;
 import treat_app.web_service.service.UserService;
 import treat_app.web_service.service.dto.UserDto;
+import treat_app.web_service.util.MyStrings;
 
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -58,7 +59,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
                 //then
                 .andExpect(status().isBadRequest())
-                .andExpect(header().string("id-error", "The id has to be null"));
+                .andExpect(header().string(MyStrings.ID_ERROR, MyStrings.ID_ERROR_HAS_TO_BE_NULL));
     }
 
     @Test
@@ -118,7 +119,7 @@ public class UserControllerTest {
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
                 //then
                 .andExpect(status().isBadRequest())
-                .andExpect(header().string("id-error", "The id cannot be null"));
+                .andExpect(header().string(MyStrings.ID_ERROR, MyStrings.ID_ERROR_CANNOT_BE_NULL));
     }
 
     @Test
