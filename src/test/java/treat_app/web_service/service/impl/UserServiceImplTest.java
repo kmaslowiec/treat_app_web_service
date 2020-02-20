@@ -62,12 +62,14 @@ public class UserServiceImplTest {
         user.setTreats(treatsFromUser);
 
         User savedUser = ObjectFactory.User();
+        savedUser.setTreats(returnedTreats);
         UserDto returnedDto = ObjectFactory.UserDto();
 
         //when
         when(treatMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
         when(userMapper.toEntity(enteredDto)).thenReturn(user);
         when(userRepo.save(user)).thenReturn(savedUser);
+        when(treatRepo.saveAll(treatsFromUser)).thenReturn(returnedTreats);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(treatsInEnteredDto);
 
