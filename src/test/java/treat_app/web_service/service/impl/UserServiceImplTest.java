@@ -64,7 +64,6 @@ public class UserServiceImplTest {
         User savedUser = ObjectFactory.User();
         savedUser.setTreats(returnedTreats);
         UserDto returnedDto = ObjectFactory.UserDto();
-
         //when
         when(treatMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
         when(userMapper.toEntity(enteredDto)).thenReturn(user);
@@ -72,7 +71,6 @@ public class UserServiceImplTest {
         when(treatRepo.saveAll(treatsFromUser)).thenReturn(returnedTreats);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(treatsInEnteredDto);
-
         UserDto testedDto = service.create(enteredDto);
         //then
         assertThat(testedDto).isNotNull();
@@ -93,7 +91,6 @@ public class UserServiceImplTest {
         user.setTreats(treatsFromUser);
         User savedUser = ObjectFactory.User();
         UserDto returnedDto = ObjectFactory.UserDto();
-
         //when
         when(treatMapper.toTreatEntities(enteredDto.getTreatDtos())).thenReturn(treatsFromUser);
         when(userMapper.toEntity(enteredDto)).thenReturn(user);
@@ -102,7 +99,6 @@ public class UserServiceImplTest {
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(Collections.emptyList());
 
         UserDto testedDto = service.create(enteredDto);
-
         //then
         assertThat(testedDto.getTreatDtos()).isEmpty();
     }
@@ -115,7 +111,6 @@ public class UserServiceImplTest {
         List<TreatDto> dtosFromUser = new ArrayList<>(Arrays.asList(ObjectFactory.TreatDto_userId(1L), ObjectFactory.TreatDto_id_name_userId(2L, "second", 1L)));
         UserDto returnedDto = ObjectFactory.UserDto();
         returnedDto.setTreatDtos(dtosFromUser);
-
         //when
         when(userRepo.findByIdOrThrow(1L)).thenReturn(userFromDb);
         when(treatRepo.findAllByUser(userFromDb)).thenReturn(treatsFromDb);
@@ -123,7 +118,6 @@ public class UserServiceImplTest {
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
         UserDto testedDto = service.getByid(1L);
-
         //then
         assertThat(testedDto).isNotNull();
         assertThat(testedDto.getTreatDtos()).hasSameSizeAs(treatsFromDb);
@@ -137,7 +131,6 @@ public class UserServiceImplTest {
     public void getByid_nullId_returnsUserDto() {
         //given
         when(userRepo.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
-
         //when-then
         service.getByid(1L);
     }
@@ -150,7 +143,6 @@ public class UserServiceImplTest {
         List<TreatDto> dtosFromUser = Collections.emptyList();
         UserDto returnedDto = ObjectFactory.UserDto();
         returnedDto.setTreatDtos(dtosFromUser);
-
         //when
         when(userRepo.findByIdOrThrow(1L)).thenReturn(userFromDb);
         when(treatRepo.findAllByUser(userFromDb)).thenReturn(treatsFromDb);
@@ -158,7 +150,6 @@ public class UserServiceImplTest {
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
         UserDto tested = service.getByid(1L);
-
         //then
         assertThat(tested.getTreatDtos()).isEmpty();
     }
@@ -184,7 +175,6 @@ public class UserServiceImplTest {
         insertedUser.setTreats(treats);
         savedUser.setTreats(treats);
         savedUserDto.setTreatDtos(treatDtos);
-
         //when
         when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenReturn(userInDb);
         when(treatMapper.toTreatEntities(treatDtos)).thenReturn(treats);
@@ -192,7 +182,6 @@ public class UserServiceImplTest {
         when(userRepo.save(insertedUser)).thenReturn(savedUser);
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(savedUserDto.getTreatDtos());
         when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
-
         //then
         UserDto testedDto = service.update(insertedUserDto);
 
@@ -209,7 +198,6 @@ public class UserServiceImplTest {
         //given
         UserDto insertedUserDto = ObjectFactory.UserDto();
         User insertedUser = ObjectFactory.User();
-
         //when-then
         when(userRepo.findByIdOrThrow(insertedUser.getId())).thenThrow(NotFoundException.class);
         service.update(insertedUserDto);
@@ -230,7 +218,6 @@ public class UserServiceImplTest {
         insertedUser.setTreats(treats);
         savedUser.setTreats(treats);
         savedUserDto.setTreatDtos(treatDtos);
-
         //when
         when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenReturn(userInDb);
         when(treatMapper.toTreatEntities(treatDtos)).thenReturn(treats);
@@ -238,7 +225,6 @@ public class UserServiceImplTest {
         when(userRepo.save(insertedUser)).thenReturn(savedUser);
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(savedUserDto.getTreatDtos());
         when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
-
         //then
         UserDto testedDto = service.update(insertedUserDto);
 
@@ -251,7 +237,6 @@ public class UserServiceImplTest {
         //given
         UserDto insertedUserDto = ObjectFactory.UserDto();
         User userInDb = ObjectFactory.User();
-
         //when-then
         when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenReturn(userInDb);
         service.deleteById(insertedUserDto.getId());
@@ -262,7 +247,6 @@ public class UserServiceImplTest {
     public void deleteById_UserWithIdDoesNotExist_throwNotFoundException() {
         //given
         UserDto insertedUserDto = ObjectFactory.UserDto();
-
         //when-then
         when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenThrow(NotFoundException.class);
         service.deleteById(insertedUserDto.getId());
