@@ -19,7 +19,7 @@ public class HeaderFactory {
 
     public static HttpHeaders UserIdCantBeNull() {
         HttpHeaders head = new HttpHeaders();
-        head.add(MyStrings.TREAT_ID_ERROR, MyStrings.TREAT_USER_ID_CANNOT_BE_NULL);
+        head.add(MyStrings.TREAT_ID_ERROR, MyStrings.TREAT_USER_ID_ERROR_CANNOT_BE_NULL);
         return head;
     }
 }

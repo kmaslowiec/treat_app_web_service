@@ -9,6 +9,8 @@ import treat_app.web_service.service.TreatService;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.mapper.TreatMapper;
 
+import java.util.List;
+
 
 @Service
 @AllArgsConstructor
@@ -26,5 +28,10 @@ public class TreatServiceImpl implements TreatService {
         Treat treat = treatMapper.toEntity(insertDto);
         Treat savedTreat = treatRepo.save(treat);
         return treatMapper.toDto(savedTreat);
+    }
+
+    @Override
+    public List<TreatDto> createMany(List<TreatDto> treats) {
+        return null;
     }
 }

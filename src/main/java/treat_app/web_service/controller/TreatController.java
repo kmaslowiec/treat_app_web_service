@@ -13,6 +13,7 @@ import treat_app.web_service.service.dto.TreatDto;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.util.List;
 
 @RestController
 @RequestMapping("api/treat")
@@ -31,5 +32,12 @@ public class TreatController {
         }
         TreatDto savedTreat = treatService.create(treatDto);
         return ResponseEntity.created(new URI(USER_PATH + "/" + savedTreat.getId())).body(savedTreat);
+    }
+
+    @PostMapping("many")
+    public ResponseEntity<List<TreatDto>> addTreats(@Validated @RequestBody List<TreatDto> treats) throws URISyntaxException {
+
+        treatService.createMany(treats);
+        return ResponseEntity.created(new URI(USER_PATH + "/" + treats.size())).body(treats);
     }
 }
