@@ -22,4 +22,10 @@ public class HeaderFactory {
         head.add(MyStrings.TREAT_ID_ERROR, MyStrings.TREAT_USER_ID_ERROR_CANNOT_BE_NULL);
         return head;
     }
+
+    public static HttpHeaders TreatsCannotBeEmpty() {
+        HttpHeaders head = new HttpHeaders();
+        head.add(MyStrings.TREAT_LIST_ERROR, MyStrings.TREAT_LIST_ERROR_LIST_CANNOT_BE_EMPTY);
+        return head;
+    }
 }

@@ -89,12 +89,9 @@ public class TreatControllerTest {
             TreatDto treatDto = ObjectFactory.TreatDto_userId(1L);
             treatDto.setId(null);
             treatDto.setName(treatNames[i]);
-            treatDto.setAmount((float) i + 1);
             insertedList.add(treatDto);
         }
 
-        //insertedList.forEach(a -> System.out.printf("The name is %s\n The Amount is %.1f\n", a.getName(), a.getAmount()));
-        //when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/treat/many")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedList)))
                 //then
@@ -133,12 +130,51 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void addTreats_treatIsNull_400httpsResponse() throws Exception {
+    public void addTreats_treatsAreNull_400httpsResponse() throws Exception {
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/treat/many")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(null)))
                 //then
+                .andExpect(status().isBadRequest());
+    }
+
+    @Test
+    public void addTreats_treatHaveNotNullID_400httpsResponse() throws Exception {
+        //given
+        int listSize = 3;
+        String[] treatNames = {"one", "two", "three"};
+        List<TreatDto> insertedList = new ArrayList<>();
+        for (int i = 0; i < listSize; i++) {
+            TreatDto treatDto = ObjectFactory.TreatDto_userId(1L);
+            treatDto.setId((long) i + 1L);
+            treatDto.setName(treatNames[i]);
+            insertedList.add(treatDto);
+        }
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/treat/many")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedList)))
+                //then
                 .andExpect(status().isBadRequest())
-                .andExpect(header().string(MyStrings.TREAT_LIST_ERROR, MyStrings.TREAT_LIST_ERROR_LIST_CANNOT_BE_NULL));
+                .andExpect(header().string(MyStrings.ID_ERROR, MyStrings.ID_ERROR_HAS_TO_BE_NULL));
+    }
+
+    @Test
+    public void addTreats_TreatHasNullUserId_400httpsResponse() throws Exception {
+        //given
+        int listSize = 3;
+        String[] treatNames = {"one", "two", "three"};
+        List<TreatDto> insertedList = new ArrayList<>();
+        for (int i = 0; i < listSize; i++) {
+            TreatDto treatDto = ObjectFactory.TreatDto_userId(null);
+            treatDto.setId(null);
+            treatDto.setName(treatNames[i]);
+            insertedList.add(treatDto);
+        }
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.post("/api/treat/many")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedList)))
+                //then
+                .andExpect(status().isBadRequest())
+                .andExpect(header().string(MyStrings.TREAT_ID_ERROR, MyStrings.TREAT_USER_ID_ERROR_CANNOT_BE_NULL));
     }
 }
