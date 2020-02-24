@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.RestController;
 import treat_app.web_service.service.TreatService;
 import treat_app.web_service.service.dto.TreatDto;
 
+import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -35,8 +36,17 @@ public class TreatController {
     }
 
     @PostMapping("many")
-    public ResponseEntity<List<TreatDto>> addTreats(@Validated @RequestBody List<TreatDto> treats) throws URISyntaxException {
-
+    public ResponseEntity<List<TreatDto>> addTreats(@Valid @RequestBody List<TreatDto> treats) throws URISyntaxException {
+        if (treats.size() == 0) {
+            return new ResponseEntity<>(treats, HeaderFactory.TreatsCannotBeEmpty(), HttpStatus.BAD_REQUEST);
+        }
+        for (TreatDto i : treats) {
+            if (i.getId() != null) {
+                return new ResponseEntity<>(treats, HeaderFactory.idHasToBeNull(), HttpStatus.BAD_REQUEST);
+            } else if (i.getUserId() == null) {
+                return new ResponseEntity<>(treats, HeaderFactory.UserIdCantBeNull(), HttpStatus.BAD_REQUEST);
+            }
+        }
         treatService.createMany(treats);
         return ResponseEntity.created(new URI(USER_PATH + "/" + treats.size())).body(treats);
     }
