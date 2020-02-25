@@ -214,8 +214,6 @@ public class UserServiceImplTest {
         User savedUser = ObjectFactory.User();
         List<TreatDto> treatDtos = Collections.emptyList();
         List<Treat> treats = Collections.emptyList();
-        insertedUserDto.setTreatDtos(treatDtos);
-        insertedUser.setTreats(treats);
         savedUser.setTreats(treats);
         savedUserDto.setTreatDtos(treatDtos);
         //when

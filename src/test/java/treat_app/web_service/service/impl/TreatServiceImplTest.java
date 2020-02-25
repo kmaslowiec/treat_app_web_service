@@ -1,7 +1,6 @@
 package treat_app.web_service.service.impl;
 
 import org.junit.Before;
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -20,6 +19,7 @@ import treat_app.web_service.service.mapper.TreatMapper;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
@@ -78,7 +78,6 @@ public class TreatServiceImplTest {
     }
 
     @Test
-    @Ignore
     public void createMany_listOfTreatsWithNullIdsAndValidUserIdAllOfTheTreatsHaveTheSameUserIds_returnsListOfTreatsWithIdsFromDb() {
         //given
         int listSize = 3;
@@ -125,14 +124,13 @@ public class TreatServiceImplTest {
         for (int i = 0; i < insertedList.size(); i++) {
             assertThat(testedDtos.get(i).getId()).isNotNull();
             assertThat(testedDtos.get(i))
-                    .isEqualToComparingOnlyGivenFields(insertedList,
+                    .isEqualToComparingOnlyGivenFields(insertedList.get(i),
                             "name", "amount", "increaseBy", "pic", "userId");
         }
     }
 
     @Test(expected = WrongInputException.class)
-    @Ignore
-    public void createMany_theUserIdsAreNotTheSame_throwsWrongInputException() {
+    public void createMany_theUserIdsAreAllDifferent_throwsWrongInputException() {
         //given
         int listSize = 3;
         String[] treatNames = {"one", "two", "three"};
@@ -147,8 +145,26 @@ public class TreatServiceImplTest {
         service.createMany(insertedList);
     }
 
+    @Test(expected = WrongInputException.class)
+    public void createMany_oneUserIdDoesNotMatchTheOthers_throwsWrongInputException() {
+        //given
+        int listSize = 3;
+        String[] treatNames = {"one", "two", "three"};
+        List<TreatDto> insertedList = new ArrayList<>();
+        for (int i = 0; i < listSize; i++) {
+            TreatDto treatDto = ObjectFactory.TreatDto_userId(1L);
+            treatDto.setId(null);
+            treatDto.setName(treatNames[i]);
+            insertedList.add(treatDto);
+        }
+        TreatDto lastDto = ObjectFactory.TreatDto_userId(2L);
+        lastDto.setId(null);
+        insertedList.set(new Random().nextInt(3), lastDto);
+        //when-then
+        service.createMany(insertedList);
+    }
+
     @Test(expected = NotFoundException.class)
-    @Ignore
     public void createMany_theUserIdIsNotInDb_throwsNotFoundException() {
         //given
         int listSize = 3;

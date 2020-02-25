@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface TreatRepo extends CrudRepository<Treat, Long> {
 
-    @Override
-    <S extends Treat> Iterable<S> saveAll(Iterable<S> entities);
+
+    <S extends Treat> List<S> saveAll(Iterable<S> entities);
 
     List<Treat> findAllByUser(User user);
 }

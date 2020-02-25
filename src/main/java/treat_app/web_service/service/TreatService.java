@@ -8,5 +8,5 @@ public interface TreatService {
 
     TreatDto create(TreatDto insertDto);
 
-    List<TreatDto> createMany(List<TreatDto> treats);
+    List<TreatDto> createMany(List<TreatDto> treatsDto);
 }

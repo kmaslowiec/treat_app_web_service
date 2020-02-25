@@ -34,7 +34,7 @@ public class UserServiceImpl implements UserService {
         User user = userMapper.toEntity(userDto);
         User savedUser = userRepo.save(user);
         treats.forEach(a -> a.setUser(savedUser));
-        List<Treat> savedTreats = (List<Treat>) treatRepo.saveAll(treats);
+        List<Treat> savedTreats = treatRepo.saveAll(treats);
         UserDto returnedDto = userMapper.toDto(savedUser);
         List<TreatDto> treatDtos = treatMapper.toTreatDtos(savedTreats);
         returnedDto.setTreatDtos(treatDtos);
@@ -56,10 +56,10 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto update(UserDto userDto) {
         userRepo.findByIdOrThrow(userDto.getId());
-        List<Treat> treatsInDto = (Objects.isNull(userDto.getTreatDtos())) ?
-                Collections.emptyList() : treatMapper.toTreatEntities(userDto.getTreatDtos());
         User user = userMapper.toEntity(userDto);
-        user.setTreats(treatsInDto);
+        if (Objects.isNull(userDto.getTreatDtos())) {
+            user.setTreats(Collections.emptyList());
+        }
         User savedUser = userRepo.save(user);
         List<TreatDto> savedTreatDtos = treatMapper.toTreatDtos(savedUser.getTreats());
         UserDto returnedUserDto = userMapper.toDto(savedUser);

@@ -91,30 +91,38 @@ public class TreatControllerTest {
             treatDto.setName(treatNames[i]);
             insertedList.add(treatDto);
         }
+        List<TreatDto> returnedList = new ArrayList<>();
+        for (int i = 0; i < listSize; i++) {
+            TreatDto treatDto = ObjectFactory.TreatDto_userId(1L);
+            treatDto.setId((long) i + 1);
+            treatDto.setName(treatNames[i]);
+            returnedList.add(treatDto);
+        }
+        when(treatService.createMany(insertedList)).thenReturn(returnedList);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/treat/many")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedList)))
                 //then
                 .andExpect(status().isCreated())
                 .andExpect(jsonPath("$").isNotEmpty())
-                .andExpect(jsonPath("$[0].id").value(insertedList.get(0).getId()))
-                .andExpect(jsonPath("$[0].name").value(insertedList.get(0).getName()))
-                .andExpect(jsonPath("$[0].amount").value(insertedList.get(0).getAmount()))
-                .andExpect(jsonPath("$[0].increaseBy").value(insertedList.get(0).getIncreaseBy()))
-                .andExpect(jsonPath("$[0].pic").value(insertedList.get(0).getPic()))
-                .andExpect(jsonPath("$[0].userId").value(insertedList.get(0).getUserId()))
-                .andExpect(jsonPath("$[1].id").value(insertedList.get(1).getId()))
-                .andExpect(jsonPath("$[1].name").value(insertedList.get(1).getName()))
-                .andExpect(jsonPath("$[1].amount").value(insertedList.get(1).getAmount()))
-                .andExpect(jsonPath("$[1].increaseBy").value(insertedList.get(1).getIncreaseBy()))
-                .andExpect(jsonPath("$[1].pic").value(insertedList.get(1).getPic()))
-                .andExpect(jsonPath("$[1].userId").value(insertedList.get(1).getUserId()))
-                .andExpect(jsonPath("$[2].id").value(insertedList.get(2).getId()))
-                .andExpect(jsonPath("$[2].name").value(insertedList.get(2).getName()))
-                .andExpect(jsonPath("$[2].amount").value(insertedList.get(2).getAmount()))
-                .andExpect(jsonPath("$[2].increaseBy").value(insertedList.get(2).getIncreaseBy()))
-                .andExpect(jsonPath("$[2].pic").value(insertedList.get(2).getPic()))
-                .andExpect(jsonPath("$[2].userId").value(insertedList.get(2).getUserId()));
+                .andExpect(jsonPath("$[0].id").value(returnedList.get(0).getId()))
+                .andExpect(jsonPath("$[0].name").value(returnedList.get(0).getName()))
+                .andExpect(jsonPath("$[0].amount").value(returnedList.get(0).getAmount()))
+                .andExpect(jsonPath("$[0].increaseBy").value(returnedList.get(0).getIncreaseBy()))
+                .andExpect(jsonPath("$[0].pic").value(returnedList.get(0).getPic()))
+                .andExpect(jsonPath("$[0].userId").value(returnedList.get(0).getUserId()))
+                .andExpect(jsonPath("$[1].id").value(returnedList.get(1).getId()))
+                .andExpect(jsonPath("$[1].name").value(returnedList.get(1).getName()))
+                .andExpect(jsonPath("$[1].amount").value(returnedList.get(1).getAmount()))
+                .andExpect(jsonPath("$[1].increaseBy").value(returnedList.get(1).getIncreaseBy()))
+                .andExpect(jsonPath("$[1].pic").value(returnedList.get(1).getPic()))
+                .andExpect(jsonPath("$[1].userId").value(returnedList.get(1).getUserId()))
+                .andExpect(jsonPath("$[2].id").value(returnedList.get(2).getId()))
+                .andExpect(jsonPath("$[2].name").value(returnedList.get(2).getName()))
+                .andExpect(jsonPath("$[2].amount").value(returnedList.get(2).getAmount()))
+                .andExpect(jsonPath("$[2].increaseBy").value(returnedList.get(2).getIncreaseBy()))
+                .andExpect(jsonPath("$[2].pic").value(returnedList.get(2).getPic()))
+                .andExpect(jsonPath("$[2].userId").value(returnedList.get(2).getUserId()));
     }
 
     @Test

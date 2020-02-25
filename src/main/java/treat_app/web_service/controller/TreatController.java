@@ -47,7 +47,7 @@ public class TreatController {
                 return new ResponseEntity<>(treats, HeaderFactory.UserIdCantBeNull(), HttpStatus.BAD_REQUEST);
             }
         }
-        treatService.createMany(treats);
-        return ResponseEntity.created(new URI(USER_PATH + "/" + treats.size())).body(treats);
+        List<TreatDto> savedTreats = treatService.createMany(treats);
+        return ResponseEntity.created(new URI(USER_PATH + "/" + treats.size())).body(savedTreats);
     }
 }
