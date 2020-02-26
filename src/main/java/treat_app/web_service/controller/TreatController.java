@@ -37,9 +37,6 @@ public class TreatController {
 
     @PostMapping("many")
     public ResponseEntity<List<TreatDto>> addTreats(@Valid @RequestBody List<TreatDto> treats) throws URISyntaxException {
-        if (treats.size() == 0) {
-            return new ResponseEntity<>(treats, HeaderFactory.TreatsCannotBeEmpty(), HttpStatus.BAD_REQUEST);
-        }
         for (TreatDto i : treats) {
             if (i.getId() != null) {
                 return new ResponseEntity<>(treats, HeaderFactory.idHasToBeNull(), HttpStatus.BAD_REQUEST);

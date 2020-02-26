@@ -9,6 +9,7 @@ import treat_app.web_service.repository.UserRepo;
 import treat_app.web_service.service.TreatService;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.mapper.TreatMapper;
+import treat_app.web_service.util.MyStrings;
 
 import java.util.List;
 import java.util.Map;
@@ -43,13 +44,24 @@ public class TreatServiceImpl implements TreatService {
 
     @Override
     public List<TreatDto> createMany(List<TreatDto> treatsDto) {
+        checkIfTreatsIsEmpty(treatsDto, MyStrings.EXCEPTION_LIST_IS_EMPTY);
         List<TreatDto> list = treatsDto.stream().filter(distinctByKey(TreatDto::getUserId)).collect(Collectors.toList());
-        if (list.size() != 1) {
-            throw new WrongInputException("The userIds have to be the same");
-        }
+        checkIfUserIdsVary(list, MyStrings.EXCEPTION_USER_IDS_VARY);
         userRepo.findByIdOrThrow(treatsDto.get(0).getUserId());
         List<Treat> treats = treatMapper.toTreatEntities(treatsDto);
         List<Treat> savedTreats = treatRepo.saveAll(treats);
         return treatMapper.toTreatDtos(savedTreats);
+    }
+
+    private void checkIfTreatsIsEmpty(List<TreatDto> treats, String message) {
+        if (treats.size() == 0) {
+            throw new WrongInputException(message);
+        }
+    }
+
+    private void checkIfUserIdsVary(List<TreatDto> treats, String message) {
+        if (treats.size() != 1) {
+            throw new WrongInputException(message);
+        }
     }
 }

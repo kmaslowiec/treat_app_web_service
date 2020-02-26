@@ -15,7 +15,6 @@ import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.util.MyStrings;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -123,18 +122,6 @@ public class TreatControllerTest {
                 .andExpect(jsonPath("$[2].increaseBy").value(returnedList.get(2).getIncreaseBy()))
                 .andExpect(jsonPath("$[2].pic").value(returnedList.get(2).getPic()))
                 .andExpect(jsonPath("$[2].userId").value(returnedList.get(2).getUserId()));
-    }
-
-    @Test
-    public void addTreats_treatsAreEmpty_400httpsResponse() throws Exception {
-        //given
-        List<TreatDto> insertedList = Collections.emptyList();
-        //when
-        mockMvc.perform(MockMvcRequestBuilders.post("/api/treat/many")
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedList)))
-                //then
-                .andExpect(status().isBadRequest())
-                .andExpect(header().string(MyStrings.TREAT_LIST_ERROR, MyStrings.TREAT_LIST_ERROR_LIST_CANNOT_BE_EMPTY));
     }
 
     @Test

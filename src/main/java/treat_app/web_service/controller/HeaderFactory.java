@@ -23,9 +23,4 @@ public class HeaderFactory {
         return head;
     }
 
-    public static HttpHeaders TreatsCannotBeEmpty() {
-        HttpHeaders head = new HttpHeaders();
-        head.add(MyStrings.TREAT_LIST_ERROR, MyStrings.TREAT_LIST_ERROR_LIST_CANNOT_BE_EMPTY);
-        return head;
-    }
 }

@@ -18,6 +18,7 @@ import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.mapper.TreatMapper;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Random;
 
@@ -71,7 +72,8 @@ public class TreatServiceImplTest {
     public void create_treatWithNotFoundUserId_throwsNotFoundException() {
         //given
         TreatDto insertedDto = ObjectFactory.TreatDto_userId(null);
-        insertedDto.setId(null);
+        insertedDto.setId(1L);
+
         //when-then
         when(userRepo.findByIdOrThrow(insertedDto.getUserId())).thenThrow(NotFoundException.class);
         service.create(insertedDto);
@@ -178,6 +180,14 @@ public class TreatServiceImplTest {
         }
         //when-then
         when(userRepo.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
+        service.createMany(insertedList);
+    }
+
+    @Test(expected = WrongInputException.class)
+    public void createMany_treatsAreEmpty_throwsWrongInputException() {
+        //given
+        List<TreatDto> insertedList = Collections.emptyList();
+        //when-then
         service.createMany(insertedList);
     }
 }
