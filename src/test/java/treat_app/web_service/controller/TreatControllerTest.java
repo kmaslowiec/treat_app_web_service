@@ -188,7 +188,7 @@ public class TreatControllerTest {
             treatDto.setName(treatNames[i]);
             returnedList.add(treatDto);
         }
-        when(treatService.createMany(insertedList)).thenReturn(returnedList);
+        when(treatService.updateMany(insertedList)).thenReturn(returnedList);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/treat/many")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedList)))

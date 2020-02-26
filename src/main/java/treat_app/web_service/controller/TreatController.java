@@ -58,7 +58,7 @@ public class TreatController {
                 return new ResponseEntity<>(treats, HeaderFactory.UserIdCantBeNull(), HttpStatus.BAD_REQUEST);
             }
         }
-        List<TreatDto> updatedTreats = treatService.createMany(treats);
+        List<TreatDto> updatedTreats = treatService.updateMany(treats);
         return ResponseEntity.ok(updatedTreats);
     }
 }

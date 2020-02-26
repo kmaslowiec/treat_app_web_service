@@ -53,6 +53,11 @@ public class TreatServiceImpl implements TreatService {
         return treatMapper.toTreatDtos(savedTreats);
     }
 
+    @Override
+    public List<TreatDto> updateMany(List<TreatDto> treats) {
+        return null;
+    }
+
     private void checkIfTreatsIsEmpty(List<TreatDto> treats, String message) {
         if (treats.size() == 0) {
             throw new WrongInputException(message);
