@@ -5,6 +5,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
@@ -46,5 +47,18 @@ public class TreatController {
         }
         List<TreatDto> savedTreats = treatService.createMany(treats);
         return ResponseEntity.created(new URI(USER_PATH + "/" + treats.size())).body(savedTreats);
+    }
+
+    @PutMapping("many")
+    public ResponseEntity<List<TreatDto>> updateTreats(@Valid @RequestBody List<TreatDto> treats) {
+        for (TreatDto i : treats) {
+            if (i.getId() == null) {
+                return new ResponseEntity<>(treats, HeaderFactory.idCantBeNull(), HttpStatus.BAD_REQUEST);
+            } else if (i.getUserId() == null) {
+                return new ResponseEntity<>(treats, HeaderFactory.UserIdCantBeNull(), HttpStatus.BAD_REQUEST);
+            }
+        }
+        List<TreatDto> updatedTreats = treatService.createMany(treats);
+        return ResponseEntity.ok(updatedTreats);
     }
 }
