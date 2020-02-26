@@ -10,7 +10,7 @@ public class MyStrings {
     public static final String TREAT_LIST_ERROR = "Treat-List-Error";
     public static final String TREAT_LIST_ERROR_LIST_CANNOT_BE_EMPTY = "The Treat List Cannot Empty";
     //exceptions
-    public static final String EXCEPTION_NO_ID = "there is no user with id ";
+    public static final String EXCEPTION_NO_ID = "there is no id ";
     public static final String EXCEPTION_LIST_IS_EMPTY = "The list cannot be empty";
     public static final String EXCEPTION_USER_IDS_VARY = "The userIds have to be the same";
 }

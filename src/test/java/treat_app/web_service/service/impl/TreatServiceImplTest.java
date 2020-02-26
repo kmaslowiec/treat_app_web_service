@@ -229,12 +229,11 @@ public class TreatServiceImplTest {
         //then
         assertThat(testedDtos).isNotNull();
         assertThat(testedDtos).hasSameSizeAs(insertedList);
-        assertThat(testedDtos).isNotEqualTo(insertedList);
         for (int i = 0; i < insertedList.size(); i++) {
             assertThat(testedDtos.get(i).getId()).isNotNull();
             assertThat(testedDtos.get(i))
                     .isEqualToComparingOnlyGivenFields(insertedList.get(i),
-                            "name", "amount", "increaseBy", "pic", "userId");
+                            "id", "name", "amount", "increaseBy", "pic", "userId");
         }
     }
 
@@ -284,12 +283,12 @@ public class TreatServiceImplTest {
             insertedList.add(treatDto);
         }
         //when-then
-        when(userRepo.findByIdOrThrow(insertedList.get(0).getId())).thenThrow(NotFoundException.class);
+        when(userRepo.findByIdOrThrow(insertedList.get(0).getUserId())).thenThrow(NotFoundException.class);
         service.createMany(insertedList);
     }
 
     @Test(expected = WrongInputException.class)
-    public void updateeMany_treatsAreEmpty_throwsWrongInputException() {
+    public void updateMany_treatsAreEmpty_throwsWrongInputException() {
         //given
         List<TreatDto> insertedList = Collections.emptyList();
         //when-then

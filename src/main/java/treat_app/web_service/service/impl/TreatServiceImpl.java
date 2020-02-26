@@ -16,7 +16,6 @@ import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.function.Function;
 import java.util.function.Predicate;
-import java.util.stream.Collectors;
 
 
 @Service
@@ -44,29 +43,43 @@ public class TreatServiceImpl implements TreatService {
 
     @Override
     public List<TreatDto> createMany(List<TreatDto> treatsDto) {
-        checkIfTreatsIsEmpty(treatsDto, MyStrings.EXCEPTION_LIST_IS_EMPTY);
-        List<TreatDto> list = treatsDto.stream().filter(distinctByKey(TreatDto::getUserId)).collect(Collectors.toList());
-        checkIfUserIdsVary(list, MyStrings.EXCEPTION_USER_IDS_VARY);
-        userRepo.findByIdOrThrow(treatsDto.get(0).getUserId());
+        return isCreateOrUpdate(treatsDto, true);
+    }
+
+    @Override
+    public List<TreatDto> updateMany(List<TreatDto> treatsDto) {
+        return isCreateOrUpdate(treatsDto, false);
+    }
+
+    private void checkIfTreatsIsEmpty(List<TreatDto> treats) {
+        if (treats.size() == 0) {
+            throw new WrongInputException(MyStrings.EXCEPTION_LIST_IS_EMPTY);
+        }
+    }
+
+    private void checkIfUserIdsVary(List<TreatDto> treatsDto) {
+        long size = treatsDto.stream()
+                .filter(distinctByKey(TreatDto::getUserId))
+                .count();
+        if (size != 1) {
+            throw new WrongInputException(MyStrings.EXCEPTION_USER_IDS_VARY);
+        }
+    }
+
+    private List<TreatDto> isCreateOrUpdate(List<TreatDto> treatsDto, boolean confirm) {
+        checkIfTreatsIsEmpty(treatsDto);
+        checkIfUserIdsVary(treatsDto);
+        if (isCreate(confirm)) {
+            userRepo.findByIdOrThrow(treatsDto.get(0).getUserId());
+        } else {
+            treatsDto.forEach(a -> treatRepo.findByIdOrThrow(a.getId()));
+        }
         List<Treat> treats = treatMapper.toTreatEntities(treatsDto);
         List<Treat> savedTreats = treatRepo.saveAll(treats);
         return treatMapper.toTreatDtos(savedTreats);
     }
 
-    @Override
-    public List<TreatDto> updateMany(List<TreatDto> treats) {
-        return null;
-    }
-
-    private void checkIfTreatsIsEmpty(List<TreatDto> treats, String message) {
-        if (treats.size() == 0) {
-            throw new WrongInputException(message);
-        }
-    }
-
-    private void checkIfUserIdsVary(List<TreatDto> treats, String message) {
-        if (treats.size() != 1) {
-            throw new WrongInputException(message);
-        }
+    private boolean isCreate(boolean decide) {
+        return decide;
     }
 }
