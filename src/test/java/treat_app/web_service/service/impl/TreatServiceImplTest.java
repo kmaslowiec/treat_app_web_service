@@ -294,4 +294,30 @@ public class TreatServiceImplTest {
         //when-then
         service.createTreats(insertedList);
     }
+
+    @Test
+    public void getTreatById_theIdIsInDb_returnsTreatDto() {
+        //given
+        User user = ObjectFactory.User();
+        Treat treatFromDB = ObjectFactory.Treat_user(user);
+        TreatDto treatDto = ObjectFactory.TreatDto_userId(1L);
+        //when
+        when(treatRepo.findByIdOrThrow(1L)).thenReturn(treatFromDB);
+        when(treatMapper.toDto(treatFromDB)).thenReturn(treatDto);
+
+        TreatDto testedDto = service.getTreatById(1L);
+        //then
+        assertThat(testedDto).isNotNull();
+        assertThat(testedDto)
+                .isEqualToComparingOnlyGivenFields(treatFromDB, "id", "name", "amount", "increaseBy", "pic");
+        assertThat(testedDto.getUserId()).isEqualTo(treatFromDB.getUser().getId());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getTreatById_theIdIsNotInDb_throwsNotFoundException() {
+        //when-then
+        when(treatRepo.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
+
+        service.getTreatById(1L);
+    }
 }
