@@ -52,6 +52,11 @@ public class TreatServiceImpl implements TreatService {
         return treatMapper.toDto(treatInDb);
     }
 
+    @Override
+    public List<TreatDto> getTreatsByIds(List<Long> ids) {
+        return null;
+    }
+
     private <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
         Map<Object, Boolean> map = new ConcurrentHashMap<>();
         return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;

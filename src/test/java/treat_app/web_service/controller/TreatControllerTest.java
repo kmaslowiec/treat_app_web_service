@@ -10,12 +10,14 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import treat_app.web_service.ObjectFactory;
-import treat_app.web_service.exceptions.NotFoundException;
+import treat_app.web_service.entity.User;
+import treat_app.web_service.exceptions.WrongInputException;
 import treat_app.web_service.service.TreatService;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.util.MyStrings;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import static org.mockito.Mockito.when;
@@ -283,14 +285,38 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void read_theIdIsNotInDb_404HttpResponse() throws Exception {
+    public void readMany_theIdsAreInDb_returnsTreatsDto() throws Exception {
         //given
-        TreatDto dto = ObjectFactory.TreatDto_userId(1L);
+        List<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
+        User user = ObjectFactory.User();
+        String[] treatNames = {"one", "two", "three"};
+        List<TreatDto> treatsDtoFromDb = new ArrayList<>();
+        for (int i = 0; i < treatNames.length; i++) {
+            TreatDto treatDto = ObjectFactory.TreatDto_userId(user.getId());
+            treatDto.setId((long) i + 1);
+            treatDto.setName(treatNames[i]);
+            treatsDtoFromDb.add(treatDto);
+        }
         //when
-        when(treatService.getTreatById(1L)).thenThrow(NotFoundException.class);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/{id}", dto.getId())
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
+        when(treatService.getTreatsByIds(ids)).thenReturn(treatsDtoFromDb);
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/many")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(treatsDtoFromDb)))
                 //then
-                .andExpect(status().isNotFound());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].id").value(ids.get(0)))
+                .andExpect(jsonPath("$[1].id").value(ids.get(1)))
+                .andExpect(jsonPath("$[2].id").value(ids.get(2)));
+    }
+
+    @Test(expected = WrongInputException.class)
+    public void readMany_longIsNull_400httpResponse() throws Exception {
+        //given
+        List<Long> ids = new ArrayList<>(Arrays.asList(1L, null, 3L));
+
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/many")
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(ids)))
+                //then
+                .andExpect(status().isBadRequest());
     }
 }

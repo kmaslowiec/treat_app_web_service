@@ -13,4 +13,6 @@ public interface TreatService {
     List<TreatDto> updateTreats(List<TreatDto> treatsDto);
 
     TreatDto getTreatById(long id);
+
+    List<TreatDto> getTreatsByIds(List<Long> ids);
 }

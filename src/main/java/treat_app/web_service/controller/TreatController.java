@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 import treat_app.web_service.service.TreatService;
 import treat_app.web_service.service.dto.TreatDto;
 
-import javax.validation.Valid;
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.List;
@@ -39,7 +38,7 @@ public class TreatController {
     }
 
     @PostMapping("many")
-    public ResponseEntity<List<TreatDto>> createMany(@Valid @RequestBody List<TreatDto> treats) throws URISyntaxException {
+    public ResponseEntity<List<TreatDto>> createMany(@Validated @RequestBody List<TreatDto> treats) throws URISyntaxException {
         for (TreatDto i : treats) {
             if (i.getId() != null) {
                 return new ResponseEntity<>(treats, HeaderFactory.idHasToBeNull(), HttpStatus.BAD_REQUEST);
@@ -52,7 +51,7 @@ public class TreatController {
     }
 
     @PutMapping("many")
-    public ResponseEntity<List<TreatDto>> update(@Valid @RequestBody List<TreatDto> treats) {
+    public ResponseEntity<List<TreatDto>> update(@Validated @RequestBody List<TreatDto> treats) {
         for (TreatDto i : treats) {
             if (i.getId() == null) {
                 return new ResponseEntity<>(treats, HeaderFactory.idCantBeNull(), HttpStatus.BAD_REQUEST);
@@ -68,5 +67,10 @@ public class TreatController {
     public ResponseEntity<TreatDto> read(@PathVariable long id) {
         TreatDto treatInDb = treatService.getTreatById(id);
         return ResponseEntity.ok(treatInDb);
+    }
+
+    @GetMapping("many")
+    public ResponseEntity<List<TreatDto>> readMany(@Validated @RequestBody List<Long> list) {
+        return null;
     }
 }
