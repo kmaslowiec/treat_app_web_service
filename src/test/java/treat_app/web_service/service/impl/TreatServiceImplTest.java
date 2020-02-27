@@ -61,7 +61,7 @@ public class TreatServiceImplTest {
         when(treatRepo.save(treat)).thenReturn(savedTreat);
         when(treatMapper.toDto(savedTreat)).thenReturn(savedDto);
 
-        TreatDto testedDto = service.create(insertedDto);
+        TreatDto testedDto = service.createTreat(insertedDto);
         //then
         assertThat(testedDto).isNotNull();
         assertThat(testedDto.getId()).isEqualTo(user.getId());
@@ -76,7 +76,7 @@ public class TreatServiceImplTest {
 
         //when-then
         when(userRepo.findByIdOrThrow(insertedDto.getUserId())).thenThrow(NotFoundException.class);
-        service.create(insertedDto);
+        service.createTreat(insertedDto);
     }
 
     @Test
@@ -117,7 +117,7 @@ public class TreatServiceImplTest {
         when(treatRepo.saveAll(treats)).thenReturn(savedTreats);
         when(treatMapper.toTreatDtos(savedTreats)).thenReturn(savedDtos);
 
-        List<TreatDto> testedDtos = service.createMany(insertedList);
+        List<TreatDto> testedDtos = service.createTreats(insertedList);
         //then
         assertThat(testedDtos).isNotNull();
         assertThat(testedDtos).hasSameSizeAs(insertedList);
@@ -142,7 +142,7 @@ public class TreatServiceImplTest {
             insertedList.add(treatDto);
         }
         //when-then
-        service.createMany(insertedList);
+        service.createTreats(insertedList);
     }
 
     @Test(expected = WrongInputException.class)
@@ -160,7 +160,7 @@ public class TreatServiceImplTest {
         lastDto.setId(null);
         insertedList.set(new Random().nextInt(3), lastDto);
         //when-then
-        service.createMany(insertedList);
+        service.createTreats(insertedList);
     }
 
     @Test(expected = NotFoundException.class)
@@ -176,7 +176,7 @@ public class TreatServiceImplTest {
         }
         //when-then
         when(userRepo.findByIdOrThrow(insertedList.get(0).getUserId())).thenThrow(NotFoundException.class);
-        service.createMany(insertedList);
+        service.createTreats(insertedList);
     }
 
     @Test(expected = WrongInputException.class)
@@ -184,7 +184,7 @@ public class TreatServiceImplTest {
         //given
         List<TreatDto> insertedList = Collections.emptyList();
         //when-then
-        service.createMany(insertedList);
+        service.createTreats(insertedList);
     }
 
     @Test
@@ -225,7 +225,7 @@ public class TreatServiceImplTest {
         when(treatRepo.saveAll(treats)).thenReturn(savedTreats);
         when(treatMapper.toTreatDtos(savedTreats)).thenReturn(savedDtos);
 
-        List<TreatDto> testedDtos = service.updateMany(insertedList);
+        List<TreatDto> testedDtos = service.updateTreats(insertedList);
         //then
         assertThat(testedDtos).isNotNull();
         assertThat(testedDtos).hasSameSizeAs(insertedList);
@@ -249,7 +249,7 @@ public class TreatServiceImplTest {
             insertedList.add(treatDto);
         }
         //when-then
-        service.updateMany(insertedList);
+        service.updateTreats(insertedList);
     }
 
     @Test(expected = WrongInputException.class)
@@ -268,7 +268,7 @@ public class TreatServiceImplTest {
         lastDto.setId((long) random + 1);
         insertedList.set(random, lastDto);
         //when-then
-        service.updateMany(insertedList);
+        service.updateTreats(insertedList);
     }
 
     @Test(expected = NotFoundException.class)
@@ -284,7 +284,7 @@ public class TreatServiceImplTest {
         }
         //when-then
         when(userRepo.findByIdOrThrow(insertedList.get(0).getUserId())).thenThrow(NotFoundException.class);
-        service.createMany(insertedList);
+        service.createTreats(insertedList);
     }
 
     @Test(expected = WrongInputException.class)
@@ -292,6 +292,6 @@ public class TreatServiceImplTest {
         //given
         List<TreatDto> insertedList = Collections.emptyList();
         //when-then
-        service.createMany(insertedList);
+        service.createTreats(insertedList);
     }
 }

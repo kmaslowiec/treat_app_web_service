@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface TreatService {
 
-    TreatDto create(TreatDto insertDto);
+    TreatDto createTreat(TreatDto insertDto);
 
-    List<TreatDto> createMany(List<TreatDto> treatsDto);
+    List<TreatDto> createTreats(List<TreatDto> treatsDto);
 
-    List<TreatDto> updateMany(List<TreatDto> treatsDto);
+    List<TreatDto> updateTreats(List<TreatDto> treatsDto);
 }

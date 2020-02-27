@@ -29,26 +29,26 @@ public class TreatServiceImpl implements TreatService {
     TreatMapper treatMapper;
 
     @Override
-    public TreatDto create(TreatDto insertDto) {
+    public TreatDto createTreat(TreatDto insertDto) {
         userRepo.findByIdOrThrow(insertDto.getUserId());
         Treat treat = treatMapper.toEntity(insertDto);
         Treat savedTreat = treatRepo.save(treat);
         return treatMapper.toDto(savedTreat);
     }
 
-    private static <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
-        Map<Object, Boolean> map = new ConcurrentHashMap<>();
-        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
-    }
-
     @Override
-    public List<TreatDto> createMany(List<TreatDto> treatsDto) {
+    public List<TreatDto> createTreats(List<TreatDto> treatsDto) {
         return isCreateOrUpdate(treatsDto, true);
     }
 
     @Override
-    public List<TreatDto> updateMany(List<TreatDto> treatsDto) {
+    public List<TreatDto> updateTreats(List<TreatDto> treatsDto) {
         return isCreateOrUpdate(treatsDto, false);
+    }
+
+    private <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
+        Map<Object, Boolean> map = new ConcurrentHashMap<>();
+        return t -> map.putIfAbsent(keyExtractor.apply(t), Boolean.TRUE) == null;
     }
 
     private void checkIfTreatsIsEmpty(List<TreatDto> treats) {

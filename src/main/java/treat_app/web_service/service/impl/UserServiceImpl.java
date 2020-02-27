@@ -26,7 +26,7 @@ public class UserServiceImpl implements UserService {
     private TreatMapper treatMapper;
 
     @Override
-    public UserDto create(UserDto userDto) {
+    public UserDto createUser(UserDto userDto) {
         if (Objects.isNull(userDto.getTreatDtos())) {
             userDto.setTreatDtos(Collections.emptyList());
         }
@@ -43,7 +43,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto getByid(Long id) {
+    public UserDto getUserByid(Long id) {
         User userFromDb = userRepo.findByIdOrThrow(id);
         List<Treat> treats = treatRepo.findAllByUser(userFromDb);
         List<TreatDto> treatDtos = treatMapper.toTreatDtos(treats);
@@ -54,7 +54,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public UserDto update(UserDto userDto) {
+    public UserDto updateUser(UserDto userDto) {
         userRepo.findByIdOrThrow(userDto.getId());
         User user = userMapper.toEntity(userDto);
         if (Objects.isNull(userDto.getTreatDtos())) {
@@ -68,7 +68,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void deleteById(Long id) {
+    public void deleteUserById(Long id) {
         User user = userRepo.findByIdOrThrow(id);
         List<Treat> treats = treatRepo.findAllByUser(user);
         treatRepo.deleteAll(treats);

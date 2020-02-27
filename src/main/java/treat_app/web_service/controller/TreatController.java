@@ -26,18 +26,18 @@ public class TreatController {
     private TreatService treatService;
 
     @PostMapping
-    public ResponseEntity<TreatDto> addTreat(@Validated @RequestBody TreatDto treatDto) throws URISyntaxException {
+    public ResponseEntity<TreatDto> create(@Validated @RequestBody TreatDto treatDto) throws URISyntaxException {
         if (treatDto.getId() != null) {
             return new ResponseEntity<>(treatDto, HeaderFactory.idHasToBeNull(), HttpStatus.BAD_REQUEST);
         } else if (treatDto.getUserId() == null) {
             return new ResponseEntity<>(treatDto, HeaderFactory.UserIdCantBeNull(), HttpStatus.BAD_REQUEST);
         }
-        TreatDto savedTreat = treatService.create(treatDto);
+        TreatDto savedTreat = treatService.createTreat(treatDto);
         return ResponseEntity.created(new URI(USER_PATH + "/" + savedTreat.getId())).body(savedTreat);
     }
 
     @PostMapping("many")
-    public ResponseEntity<List<TreatDto>> addTreats(@Valid @RequestBody List<TreatDto> treats) throws URISyntaxException {
+    public ResponseEntity<List<TreatDto>> createMany(@Valid @RequestBody List<TreatDto> treats) throws URISyntaxException {
         for (TreatDto i : treats) {
             if (i.getId() != null) {
                 return new ResponseEntity<>(treats, HeaderFactory.idHasToBeNull(), HttpStatus.BAD_REQUEST);
@@ -45,12 +45,12 @@ public class TreatController {
                 return new ResponseEntity<>(treats, HeaderFactory.UserIdCantBeNull(), HttpStatus.BAD_REQUEST);
             }
         }
-        List<TreatDto> savedTreats = treatService.createMany(treats);
+        List<TreatDto> savedTreats = treatService.createTreats(treats);
         return ResponseEntity.created(new URI(USER_PATH + "/" + treats.size())).body(savedTreats);
     }
 
     @PutMapping("many")
-    public ResponseEntity<List<TreatDto>> updateTreats(@Valid @RequestBody List<TreatDto> treats) {
+    public ResponseEntity<List<TreatDto>> update(@Valid @RequestBody List<TreatDto> treats) {
         for (TreatDto i : treats) {
             if (i.getId() == null) {
                 return new ResponseEntity<>(treats, HeaderFactory.idCantBeNull(), HttpStatus.BAD_REQUEST);
@@ -58,7 +58,7 @@ public class TreatController {
                 return new ResponseEntity<>(treats, HeaderFactory.UserIdCantBeNull(), HttpStatus.BAD_REQUEST);
             }
         }
-        List<TreatDto> updatedTreats = treatService.updateMany(treats);
+        List<TreatDto> updatedTreats = treatService.updateTreats(treats);
         return ResponseEntity.ok(updatedTreats);
     }
 }

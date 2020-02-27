@@ -39,7 +39,7 @@ public class TreatControllerTest {
         insertDto.setId(null);
         TreatDto returnedDto = ObjectFactory.TreatDto_userId(1L);
         //when
-        when(treatService.create(insertDto)).thenReturn(returnedDto);
+        when(treatService.createTreat(insertDto)).thenReturn(returnedDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/treat")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
                 //then
@@ -96,7 +96,7 @@ public class TreatControllerTest {
             treatDto.setName(treatNames[i]);
             returnedList.add(treatDto);
         }
-        when(treatService.createMany(insertedList)).thenReturn(returnedList);
+        when(treatService.createTreats(insertedList)).thenReturn(returnedList);
 
         mockMvc.perform(MockMvcRequestBuilders.post("/api/treat/many")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedList)))
@@ -188,7 +188,7 @@ public class TreatControllerTest {
             treatDto.setName(treatNames[i]);
             returnedList.add(treatDto);
         }
-        when(treatService.updateMany(insertedList)).thenReturn(returnedList);
+        when(treatService.updateTreats(insertedList)).thenReturn(returnedList);
 
         mockMvc.perform(MockMvcRequestBuilders.put("/api/treat/many")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedList)))

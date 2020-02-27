@@ -27,33 +27,33 @@ public class UserController {
     private UserService userService;
 
     @PostMapping
-    public ResponseEntity<UserDto> addUser(@Validated @RequestBody UserDto userDto) throws URISyntaxException {
+    public ResponseEntity<UserDto> create(@Validated @RequestBody UserDto userDto) throws URISyntaxException {
         if (userDto.getId() != null) {
             return new ResponseEntity<>(userDto, HeaderFactory.idHasToBeNull(), HttpStatus.BAD_REQUEST);
         }
-        UserDto savedUser = userService.create(userDto);
+        UserDto savedUser = userService.createUser(userDto);
 
         return ResponseEntity.created(new URI(USER_PATH + "/" + savedUser.getId())).body(savedUser);
     }
 
     @GetMapping("{id}")
-    public ResponseEntity<UserDto> readUser(@PathVariable Long id) {
-        UserDto fromDb = userService.getByid(id);
+    public ResponseEntity<UserDto> read(@PathVariable Long id) {
+        UserDto fromDb = userService.getUserByid(id);
         return ResponseEntity.ok(fromDb);
     }
 
     @PutMapping
-    public ResponseEntity<UserDto> updateUser(@Validated @RequestBody UserDto userDto) {
+    public ResponseEntity<UserDto> update(@Validated @RequestBody UserDto userDto) {
         if (userDto.getId() == null) {
             return new ResponseEntity<>(userDto, HeaderFactory.idCantBeNull(), HttpStatus.BAD_REQUEST);
         }
-        UserDto updatedDto = userService.update(userDto);
+        UserDto updatedDto = userService.updateUser(userDto);
         return ResponseEntity.ok(updatedDto);
     }
 
     @DeleteMapping("{id}")
-    public ResponseEntity<Long> deleteUserById(@PathVariable Long id) {
-        userService.deleteById(id);
+    public ResponseEntity<Long> deleteById(@PathVariable Long id) {
+        userService.deleteUserById(id);
         return ResponseEntity.noContent().build();
     }
 }

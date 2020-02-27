@@ -71,7 +71,7 @@ public class UserServiceImplTest {
         when(treatRepo.saveAll(treatsFromUser)).thenReturn(returnedTreats);
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(treatsInEnteredDto);
-        UserDto testedDto = service.create(enteredDto);
+        UserDto testedDto = service.createUser(enteredDto);
         //then
         assertThat(testedDto).isNotNull();
         assertThat(testedDto.getTreatDtos()).isEqualTo(enteredDto.getTreatDtos());
@@ -98,7 +98,7 @@ public class UserServiceImplTest {
         when(userMapper.toDto(savedUser)).thenReturn(returnedDto);
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(Collections.emptyList());
 
-        UserDto testedDto = service.create(enteredDto);
+        UserDto testedDto = service.createUser(enteredDto);
         //then
         assertThat(testedDto.getTreatDtos()).isEmpty();
     }
@@ -117,7 +117,7 @@ public class UserServiceImplTest {
         when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
-        UserDto testedDto = service.getByid(1L);
+        UserDto testedDto = service.getUserByid(1L);
         //then
         assertThat(testedDto).isNotNull();
         assertThat(testedDto.getTreatDtos()).hasSameSizeAs(treatsFromDb);
@@ -132,7 +132,7 @@ public class UserServiceImplTest {
         //given
         when(userRepo.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
         //when-then
-        service.getByid(1L);
+        service.getUserByid(1L);
     }
 
     @Test
@@ -149,7 +149,7 @@ public class UserServiceImplTest {
         when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
-        UserDto tested = service.getByid(1L);
+        UserDto tested = service.getUserByid(1L);
         //then
         assertThat(tested.getTreatDtos()).isEmpty();
     }
@@ -183,7 +183,7 @@ public class UserServiceImplTest {
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(savedUserDto.getTreatDtos());
         when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
         //then
-        UserDto testedDto = service.update(insertedUserDto);
+        UserDto testedDto = service.updateUser(insertedUserDto);
 
         assertThat(testedDto).isNotNull();
         assertThat(testedDto.getTreatDtos()).isEqualTo(insertedUserDto.getTreatDtos());
@@ -200,7 +200,7 @@ public class UserServiceImplTest {
         User insertedUser = ObjectFactory.User();
         //when-then
         when(userRepo.findByIdOrThrow(insertedUser.getId())).thenThrow(NotFoundException.class);
-        service.update(insertedUserDto);
+        service.updateUser(insertedUserDto);
     }
 
     @Test
@@ -224,7 +224,7 @@ public class UserServiceImplTest {
         when(treatMapper.toTreatDtos(savedUser.getTreats())).thenReturn(savedUserDto.getTreatDtos());
         when(userMapper.toDto(savedUser)).thenReturn(savedUserDto);
         //then
-        UserDto testedDto = service.update(insertedUserDto);
+        UserDto testedDto = service.updateUser(insertedUserDto);
 
         assertThat(testedDto).isNotNull();
         assertThat(testedDto.getTreatDtos()).isEmpty();
@@ -237,7 +237,7 @@ public class UserServiceImplTest {
         User userInDb = ObjectFactory.User();
         //when-then
         when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenReturn(userInDb);
-        service.deleteById(insertedUserDto.getId());
+        service.deleteUserById(insertedUserDto.getId());
         verify(userRepo).deleteById(userInDb.getId());
     }
 
@@ -247,7 +247,7 @@ public class UserServiceImplTest {
         UserDto insertedUserDto = ObjectFactory.UserDto();
         //when-then
         when(userRepo.findByIdOrThrow(insertedUserDto.getId())).thenThrow(NotFoundException.class);
-        service.deleteById(insertedUserDto.getId());
+        service.deleteUserById(insertedUserDto.getId());
         verify(userRepo).deleteById(insertedUserDto.getId());
     }
 }

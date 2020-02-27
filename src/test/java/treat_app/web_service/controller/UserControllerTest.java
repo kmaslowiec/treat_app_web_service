@@ -38,7 +38,7 @@ public class UserControllerTest {
         insertDto.setId(null);
         UserDto returnedDto = ObjectFactory.UserDto();
         //when
-        when(userService.create(insertDto)).thenReturn(returnedDto);
+        when(userService.createUser(insertDto)).thenReturn(returnedDto);
         mockMvc.perform(MockMvcRequestBuilders.post("/api/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
                 //then
@@ -67,7 +67,7 @@ public class UserControllerTest {
         //given
         UserDto dto = ObjectFactory.UserDto();
         //when
-        when(userService.getByid(1L)).thenReturn(dto);
+        when(userService.getUserByid(1L)).thenReturn(dto);
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
                 //then
@@ -84,7 +84,7 @@ public class UserControllerTest {
         //given
         UserDto insertedDto = ObjectFactory.UserDto();
         //when
-        doThrow(new NotFoundException("")).when(userService).getByid(insertedDto.getId());
+        doThrow(new NotFoundException("")).when(userService).getUserByid(insertedDto.getId());
         mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", insertedDto.getId())
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedDto)))
                 //then
@@ -97,7 +97,7 @@ public class UserControllerTest {
         UserDto insertDto = ObjectFactory.UserDto();
         UserDto returnedDto = ObjectFactory.UserDto();
         //when
-        when(userService.update(insertDto)).thenReturn(returnedDto);
+        when(userService.updateUser(insertDto)).thenReturn(returnedDto);
         mockMvc.perform(MockMvcRequestBuilders.put("/api/user")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertDto)))
                 //then
