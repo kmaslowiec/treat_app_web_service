@@ -74,4 +74,5 @@ public class UserServiceImpl implements UserService {
         treatRepo.deleteAll(treats);
         userRepo.deleteById(id);
     }
+
 }

@@ -10,6 +10,7 @@ import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import treat_app.web_service.ObjectFactory;
+import treat_app.web_service.exceptions.NotFoundException;
 import treat_app.web_service.service.TreatService;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.util.MyStrings;
@@ -79,7 +80,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void addTreats_validListWithANUllIdAndUserId_201httpsResponse() throws Exception {
+    public void addTreats_validListWithANUllIdAndUserId_201httpResponse() throws Exception {
         //given
         String[] treatNames = {"one", "two", "three"};
         List<TreatDto> insertedList = new ArrayList<>();
@@ -124,7 +125,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void addTreats_treatsAreNull_400httpsResponse() throws Exception {
+    public void addTreats_treatsAreNull_400httpResponse() throws Exception {
         //when
         mockMvc.perform(MockMvcRequestBuilders.post("/api/treat/many")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(null)))
@@ -133,7 +134,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void addTreats_treatHaveNotNullID_400httpsResponse() throws Exception {
+    public void addTreats_treatHaveNotNullID_400httpResponse() throws Exception {
         //given
         String[] treatNames = {"one", "two", "three"};
         List<TreatDto> insertedList = new ArrayList<>();
@@ -152,7 +153,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void addTreats_TreatHasNullUserId_400httpsResponse() throws Exception {
+    public void addTreats_TreatHasNullUserId_400httpResponse() throws Exception {
         //given
         String[] treatNames = {"one", "two", "three"};
         List<TreatDto> insertedList = new ArrayList<>();
@@ -171,7 +172,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void updateTreatsValidListWithNotNullIdAndUserId_201httpsResponse() throws Exception {
+    public void updateTreatsValidListWithNotNullIdAndUserId_201httpResponse() throws Exception {
         //given
         String[] treatNames = {"one", "two", "three"};
         List<TreatDto> insertedList = new ArrayList<>();
@@ -216,7 +217,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void updateTreats_treatsAreNull_400httpsResponse() throws Exception {
+    public void updateTreats_treatsAreNull_400httpResponse() throws Exception {
         //when
         mockMvc.perform(MockMvcRequestBuilders.put("/api/treat/many")
                 .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(null)))
@@ -225,7 +226,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void updateTreats_treatHaveNullID_400httpsResponse() throws Exception {
+    public void updateTreats_treatHaveNullID_400httpResponse() throws Exception {
         //given
         String[] treatNames = {"one", "two", "three"};
         List<TreatDto> insertedList = new ArrayList<>();
@@ -244,7 +245,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void updateTreats_TreatHasNullUserId_400httpsResponse() throws Exception {
+    public void updateTreats_TreatHasNullUserId_400httpResponse() throws Exception {
         //given
         String[] treatNames = {"one", "two", "three"};
         List<TreatDto> insertedList = new ArrayList<>();
@@ -260,5 +261,36 @@ public class TreatControllerTest {
                 //then
                 .andExpect(status().isBadRequest())
                 .andExpect(header().string(MyStrings.TREAT_ID_ERROR, MyStrings.TREAT_USER_ID_ERROR_CANNOT_BE_NULL));
+    }
+
+    @Test
+    public void read_theIdIsInDb_200HttpResponse() throws Exception {
+        //given
+        TreatDto dto = ObjectFactory.TreatDto_userId(1L);
+        //when
+        when(treatService.getTreatById(1L)).thenReturn(dto);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/{id}", dto.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
+                //then
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$").isNotEmpty())
+                .andExpect(jsonPath("$.id").value(dto.getId()))
+                .andExpect(jsonPath("$.name").value(dto.getName()))
+                .andExpect(jsonPath("$.amount").value(dto.getAmount()))
+                .andExpect(jsonPath("$.increaseBy").value(dto.getIncreaseBy()))
+                .andExpect(jsonPath("$.pic").value(dto.getPic()))
+                .andExpect(jsonPath("$.userId").value(dto.getUserId()));
+    }
+
+    @Test
+    public void read_theIdIsNotInDb_404HttpResponse() throws Exception {
+        //given
+        TreatDto dto = ObjectFactory.TreatDto_userId(1L);
+        //when
+        when(treatService.getTreatById(1L)).thenThrow(NotFoundException.class);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/{id}", dto.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
+                //then
+                .andExpect(status().isNotFound());
     }
 }

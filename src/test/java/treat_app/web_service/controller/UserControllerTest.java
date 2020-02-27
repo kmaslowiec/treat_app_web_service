@@ -15,7 +15,6 @@ import treat_app.web_service.service.UserService;
 import treat_app.web_service.service.dto.UserDto;
 import treat_app.web_service.util.MyStrings;
 
-import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -80,13 +79,13 @@ public class UserControllerTest {
     }
 
     @Test
-    public void readUser_notExistingId_404httpResponse() throws Exception {
+    public void read_theIdIsNotInDb_404HttpResponse() throws Exception {
         //given
-        UserDto insertedDto = ObjectFactory.UserDto();
+        UserDto dto = ObjectFactory.UserDto();
         //when
-        doThrow(new NotFoundException("")).when(userService).getUserByid(insertedDto.getId());
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", insertedDto.getId())
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(insertedDto)))
+        when(userService.getUserByid(1L)).thenThrow(NotFoundException.class);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/user/{id}", dto.getId())
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
                 //then
                 .andExpect(status().isNotFound());
     }
