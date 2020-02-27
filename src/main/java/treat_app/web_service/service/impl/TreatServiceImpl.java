@@ -48,7 +48,8 @@ public class TreatServiceImpl implements TreatService {
 
     @Override
     public TreatDto getTreatById(long id) {
-        return null;
+        Treat treatInDb = treatRepo.findByIdOrThrow(id);
+        return treatMapper.toDto(treatInDb);
     }
 
     private <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
