@@ -66,6 +66,7 @@ public class TreatController {
 
     @GetMapping("{id}")
     public ResponseEntity<TreatDto> read(@PathVariable long id) {
-        return null;
+        TreatDto treatInDb = treatService.getTreatById(id);
+        return ResponseEntity.ok(treatInDb);
     }
 }
