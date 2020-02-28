@@ -70,7 +70,11 @@ public class TreatController {
     }
 
     @GetMapping("many")
-    public ResponseEntity<List<TreatDto>> readMany(@Validated @RequestBody List<Long> list) {
-        return null;
+    public ResponseEntity<List<TreatDto>> readMany(@Validated @RequestBody List<Long> ids) {
+        if (ids.contains(null)) {
+            return new ResponseEntity<>(HeaderFactory.idCantBeNull(), HttpStatus.BAD_REQUEST);
+        }
+        List<TreatDto> treatsDto = treatService.getTreatsByIds(ids);
+        return new ResponseEntity<>(treatsDto, HttpStatus.OK);
     }
 }

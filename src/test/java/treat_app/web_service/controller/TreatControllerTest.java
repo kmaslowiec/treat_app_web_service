@@ -11,7 +11,6 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import treat_app.web_service.ObjectFactory;
 import treat_app.web_service.entity.User;
-import treat_app.web_service.exceptions.WrongInputException;
 import treat_app.web_service.service.TreatService;
 import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.util.MyStrings;
@@ -285,7 +284,7 @@ public class TreatControllerTest {
     }
 
     @Test
-    public void readMany_theIdsAreInDb_returnsTreatsDto() throws Exception {
+    public void readMany_theIdsAreInDb_200HttpResponse() throws Exception {
         //given
         List<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
         User user = ObjectFactory.User();
@@ -301,7 +300,7 @@ public class TreatControllerTest {
         when(treatService.getTreatsByIds(ids)).thenReturn(treatsDtoFromDb);
 
         mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/many")
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(treatsDtoFromDb)))
+                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(ids)))
                 //then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$[0].id").value(ids.get(0)))
@@ -309,7 +308,7 @@ public class TreatControllerTest {
                 .andExpect(jsonPath("$[2].id").value(ids.get(2)));
     }
 
-    @Test(expected = WrongInputException.class)
+    @Test
     public void readMany_longIsNull_400httpResponse() throws Exception {
         //given
         List<Long> ids = new ArrayList<>(Arrays.asList(1L, null, 3L));
