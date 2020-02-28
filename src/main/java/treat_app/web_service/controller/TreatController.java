@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import treat_app.web_service.service.TreatService;
 import treat_app.web_service.service.dto.TreatDto;
@@ -70,7 +71,7 @@ public class TreatController {
     }
 
     @GetMapping("many")
-    public ResponseEntity<List<TreatDto>> readMany(@Validated @RequestBody List<Long> ids) {
+    public ResponseEntity<List<TreatDto>> readMany(@Validated @RequestParam List<Long> ids) {
         if (ids.contains(null)) {
             return new ResponseEntity<>(HeaderFactory.idCantBeNull(), HttpStatus.BAD_REQUEST);
         }

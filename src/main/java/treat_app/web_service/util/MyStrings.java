@@ -11,4 +11,6 @@ public class MyStrings {
     public static final String EXCEPTION_NO_ID = "there is no id ";
     public static final String EXCEPTION_LIST_IS_EMPTY = "The list cannot be empty";
     public static final String EXCEPTION_USER_IDS_VARY = "The userIds have to be the same";
+    public static final String EXCEPTION_IDS_NOT_IN_DB = "The ids %s are not in db";
+    public static final String EXCEPTION_ID_NOT_IN_DB = "The id %s is not in db";
 }

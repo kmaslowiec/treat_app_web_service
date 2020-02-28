@@ -3,6 +3,7 @@ package treat_app.web_service.service.impl;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 import treat_app.web_service.entity.Treat;
+import treat_app.web_service.exceptions.NotFoundException;
 import treat_app.web_service.exceptions.WrongInputException;
 import treat_app.web_service.repository.TreatRepo;
 import treat_app.web_service.repository.UserRepo;
@@ -11,6 +12,7 @@ import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.mapper.TreatMapper;
 import treat_app.web_service.util.MyStrings;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
@@ -54,7 +56,9 @@ public class TreatServiceImpl implements TreatService {
 
     @Override
     public List<TreatDto> getTreatsByIds(List<Long> ids) {
-        return null;
+        checkIfIdsAreInDb(ids);
+        List<Treat> treats = treatRepo.findAllById(ids);
+        return treatMapper.toTreatDtos(treats);
     }
 
     private <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
@@ -74,6 +78,19 @@ public class TreatServiceImpl implements TreatService {
                 .count();
         if (size != 1) {
             throw new WrongInputException(MyStrings.EXCEPTION_USER_IDS_VARY);
+        }
+    }
+
+    private void checkIfIdsAreInDb(List<Long> ids) {
+        List<Long> notInDb = new ArrayList<>();
+        for (long i : ids) {
+            if (!treatRepo.existsById(i)) {
+                notInDb.add(i);
+            }
+        }
+        if (notInDb.size() != 0) {
+            String msg = notInDb.size() > 1 ? MyStrings.EXCEPTION_IDS_NOT_IN_DB : MyStrings.EXCEPTION_IDS_NOT_IN_DB;
+            throw new NotFoundException(String.format(msg, notInDb.toString().substring(1, notInDb.toString().length() - 1)));
         }
     }
 

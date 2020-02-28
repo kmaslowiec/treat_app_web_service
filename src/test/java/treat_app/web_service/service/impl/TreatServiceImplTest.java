@@ -343,6 +343,9 @@ public class TreatServiceImplTest {
             treatsDto.add(treatDto);
         }
         //when
+        for (long i : ids) {
+            when(treatRepo.existsById(i)).thenReturn(true);
+        }
         when(treatRepo.findAllById(ids)).thenReturn(treatsFromDb);
         when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(treatsDto);
 
@@ -353,8 +356,12 @@ public class TreatServiceImplTest {
         for (int i = 0; i < ids.size(); i++) {
             assertThat(retrievedDto.get(i).getId()).isNotNull();
             assertThat(retrievedDto.get(i))
-                    .isEqualToComparingOnlyGivenFields(ids.get(i),
-                            "id", "name", "amount", "increaseBy", "pic", "userId");
+                    .hasFieldOrPropertyWithValue("id", retrievedDto.get(i).getId())
+                    .hasFieldOrPropertyWithValue("name", retrievedDto.get(i).getName())
+                    .hasFieldOrPropertyWithValue("amount", retrievedDto.get(i).getAmount())
+                    .hasFieldOrPropertyWithValue("increaseBy", retrievedDto.get(i).getIncreaseBy())
+                    .hasFieldOrPropertyWithValue("pic", retrievedDto.get(i).getPic())
+                    .hasFieldOrPropertyWithValue("userId", retrievedDto.get(i).getUserId());
         }
     }
 
