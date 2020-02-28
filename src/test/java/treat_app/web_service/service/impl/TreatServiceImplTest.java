@@ -18,6 +18,7 @@ import treat_app.web_service.service.dto.TreatDto;
 import treat_app.web_service.service.mapper.TreatMapper;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Random;
@@ -319,5 +320,50 @@ public class TreatServiceImplTest {
         when(treatRepo.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
 
         service.getTreatById(1L);
+    }
+
+    @Test
+    public void getTreatsByIds_allIdsAreInDb_returnsTreatsDto() {
+        //given
+        List<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
+        User user = ObjectFactory.User();
+        String[] treatNames = {"one", "two", "three"};
+        List<Treat> treatsFromDb = new ArrayList<>();
+        for (int i = 0; i < treatNames.length; i++) {
+            Treat treat = ObjectFactory.Treat_user(user);
+            treat.setId((long) i + 1);
+            treat.setName(treatNames[i]);
+            treatsFromDb.add(treat);
+        }
+        List<TreatDto> treatsDto = new ArrayList<>();
+        for (int i = 0; i < treatNames.length; i++) {
+            TreatDto treatDto = ObjectFactory.TreatDto_userId(user.getId());
+            treatDto.setId((long) i + 1);
+            treatDto.setName(treatNames[i]);
+            treatsDto.add(treatDto);
+        }
+        //when
+        when(treatRepo.findAllById(ids)).thenReturn(treatsFromDb);
+        when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(treatsDto);
+
+        List<TreatDto> retrievedDto = service.getTreatsByIds(ids);
+        //then
+        assertThat(retrievedDto).isNotNull();
+        assertThat(retrievedDto).hasSameSizeAs(ids);
+        for (int i = 0; i < ids.size(); i++) {
+            assertThat(retrievedDto.get(i).getId()).isNotNull();
+            assertThat(retrievedDto.get(i))
+                    .isEqualToComparingOnlyGivenFields(ids.get(i),
+                            "id", "name", "amount", "increaseBy", "pic", "userId");
+        }
+    }
+
+
+    @Test(expected = NotFoundException.class)
+    public void getTreatsByIds_idIsNotInDb_throwsNotFoundException() {
+        //given
+        List<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
+        //when-then
+        service.getTreatsByIds(ids);
     }
 }

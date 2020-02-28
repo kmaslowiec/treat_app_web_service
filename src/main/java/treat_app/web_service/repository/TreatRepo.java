@@ -19,5 +19,8 @@ public interface TreatRepo extends CrudRepository<Treat, Long> {
         return findById(id).orElseThrow(() -> new NotFoundException(MyStrings.EXCEPTION_NO_ID + id));
     }
 
+    @Override
+    List<Treat> findAllById(Iterable<Long> list);
+
     List<Treat> findAllByUser(User user);
 }
