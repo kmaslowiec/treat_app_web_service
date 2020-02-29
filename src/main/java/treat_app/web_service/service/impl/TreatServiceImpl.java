@@ -63,7 +63,11 @@ public class TreatServiceImpl implements TreatService {
 
     @Override
     public List<TreatDto> getAllTreatsByUserId(long userId) {
-        return null;
+        if (!userRepo.existsById(userId)) {
+            throw new NotFoundException(MyStrings.EXCEPTION_NO_ID + userId);
+        }
+        List<Treat> treatsInDb = treatRepo.findAllByUserId(userId);
+        return treatMapper.toTreatDtos(treatsInDb);
     }
 
     private <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {
