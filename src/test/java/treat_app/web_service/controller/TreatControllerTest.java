@@ -270,8 +270,7 @@ public class TreatControllerTest {
         TreatDto dto = ObjectFactory.TreatDto_userId(1L);
         //when
         when(treatService.getTreatById(1L)).thenReturn(dto);
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/{id}", dto.getId())
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(dto)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/{id}", dto.getId()))
                 //then
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$").isNotEmpty())
@@ -299,23 +298,47 @@ public class TreatControllerTest {
         //when
         when(treatService.getTreatsByIds(ids)).thenReturn(treatsDtoFromDb);
 
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/many")
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(ids)))
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/many").param("ids", "1, 2, 3"))
                 //then
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$[0].id").value(ids.get(0)))
-                .andExpect(jsonPath("$[1].id").value(ids.get(1)))
-                .andExpect(jsonPath("$[2].id").value(ids.get(2)));
+                .andExpect(jsonPath("$[0].id").value(treatsDtoFromDb.get(0).getId()))
+                .andExpect(jsonPath("$[1].id").value(treatsDtoFromDb.get(1).getId()))
+                .andExpect(jsonPath("$[2].id").value(treatsDtoFromDb.get(2).getId()))
+                .andExpect(jsonPath("$[0].name").value(treatsDtoFromDb.get(0).getName()))
+                .andExpect(jsonPath("$[1].name").value(treatsDtoFromDb.get(1).getName()))
+                .andExpect(jsonPath("$[2].name").value(treatsDtoFromDb.get(2).getName()))
+                .andExpect(jsonPath("$[0].amount").value(treatsDtoFromDb.get(0).getAmount()))
+                .andExpect(jsonPath("$[1].amount").value(treatsDtoFromDb.get(1).getAmount()))
+                .andExpect(jsonPath("$[2].amount").value(treatsDtoFromDb.get(2).getAmount()))
+                .andExpect(jsonPath("$[0].increaseBy").value(treatsDtoFromDb.get(0).getIncreaseBy()))
+                .andExpect(jsonPath("$[1].increaseBy").value(treatsDtoFromDb.get(1).getIncreaseBy()))
+                .andExpect(jsonPath("$[2].increaseBy").value(treatsDtoFromDb.get(2).getIncreaseBy()))
+                .andExpect(jsonPath("$[0].pic").value(treatsDtoFromDb.get(0).getPic()))
+                .andExpect(jsonPath("$[1].pic").value(treatsDtoFromDb.get(1).getPic()))
+                .andExpect(jsonPath("$[2].pic").value(treatsDtoFromDb.get(2).getPic()))
+                .andExpect(jsonPath("$[0].userId").value(treatsDtoFromDb.get(0).getUserId()))
+                .andExpect(jsonPath("$[1].userId").value(treatsDtoFromDb.get(1).getUserId()))
+                .andExpect(jsonPath("$[2].userId").value(treatsDtoFromDb.get(2).getUserId()));
+
     }
 
     @Test
-    public void readMany_longIsNull_400httpResponse() throws Exception {
-        //given
-        List<Long> ids = new ArrayList<>(Arrays.asList(1L, null, 3L));
-
-        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/many")
-                .contentType(MediaType.APPLICATION_JSON_UTF8).content(Converter.asJsonString(ids)))
+    public void readManyByUserId_userIdIsInDb_200httpResponse() throws Exception {
+        User user = ObjectFactory.User();
+        String[] treatNames = {"one", "two", "three"};
+        List<TreatDto> treatsDtoFromDb = new ArrayList<>();
+        for (int i = 0; i < treatNames.length; i++) {
+            TreatDto treatDto = ObjectFactory.TreatDto_userId(user.getId());
+            treatDto.setId((long) i + 1);
+            treatDto.setName(treatNames[i]);
+            treatsDtoFromDb.add(treatDto);
+        }
+        when(treatService.getAllTreatsByUserId(user.getId())).thenReturn(treatsDtoFromDb);
+        mockMvc.perform(MockMvcRequestBuilders.get("/api/treat/many/{userId}", user.getId()))
                 //then
-                .andExpect(status().isBadRequest());
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$[0].userId").value(treatsDtoFromDb.get(0).getUserId()))
+                .andExpect(jsonPath("$[1].userId").value(treatsDtoFromDb.get(1).getUserId()))
+                .andExpect(jsonPath("$[2].userId").value(treatsDtoFromDb.get(2).getUserId()));
     }
 }

@@ -44,7 +44,7 @@ public class TreatRepoTest {
         List<Treat> treatsInDb = new ArrayList<>();
         treats.forEach(a -> treatsInDb.add(entityManager.merge(a)));
 
-        List<Treat> tested = treatRepo.findAllByUser(user);
+        List<Treat> tested = treatRepo.findAllByUserId(user.getId());
 
         //then
         assertThat(tested).isNotNull();
@@ -58,7 +58,7 @@ public class TreatRepoTest {
     @Test
     public void findAllByUser_userIsNotFound_returnsEmptyList() {
         //when
-        List<Treat> tested = treatRepo.findAllByUser(null);
+        List<Treat> tested = treatRepo.findAllByUserId(0);
 
         //then
         assertThat(tested).isEmpty();

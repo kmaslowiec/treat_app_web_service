@@ -45,7 +45,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto getUserByid(Long id) {
         User userFromDb = userRepo.findByIdOrThrow(id);
-        List<Treat> treats = treatRepo.findAllByUser(userFromDb);
+        List<Treat> treats = treatRepo.findAllByUserId(userFromDb.getId());
         List<TreatDto> treatDtos = treatMapper.toTreatDtos(treats);
         UserDto returnedDto = userMapper.toDto(userFromDb);
         returnedDto.setTreatDtos(treatDtos);
@@ -70,7 +70,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void deleteUserById(Long id) {
         User user = userRepo.findByIdOrThrow(id);
-        List<Treat> treats = treatRepo.findAllByUser(user);
+        List<Treat> treats = treatRepo.findAllByUserId(user.getId());
         treatRepo.deleteAll(treats);
         userRepo.deleteById(id);
     }
