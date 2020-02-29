@@ -31,7 +31,7 @@ public class UserControllerTest {
     private UserService userService;
 
     @Test
-    public void addUser_validUseWithLoginAndPassword_201httpResponse() throws Exception {
+    public void add_validUseWithLoginAndPassword_201httpResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
         insertDto.setId(null);
@@ -50,7 +50,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void addUser_userIdIsNotNUll_400httpResponse() throws Exception {
+    public void add_userIdIsNotNUll_400httpResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
         //when
@@ -62,7 +62,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void readUser_validIdWithNUllTreats_200httpResponse() throws Exception {
+    public void read_validIdWithNUllTreats_200httpResponse() throws Exception {
         //given
         UserDto dto = ObjectFactory.UserDto();
         //when
@@ -91,7 +91,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void updateUser_userIdIsNotNull_200httpResponse() throws Exception {
+    public void update_userIdIsNotNull_200httpResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
         UserDto returnedDto = ObjectFactory.UserDto();
@@ -109,7 +109,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void updateUser_userIdIsNull_400httpResponse() throws Exception {
+    public void update_userIdIsNull_400httpResponse() throws Exception {
         //given
         UserDto insertDto = ObjectFactory.UserDto();
         insertDto.setId(null);
@@ -122,7 +122,7 @@ public class UserControllerTest {
     }
 
     @Test
-    public void deleteUserById_UserIdIsNotNull_204httpResponse() throws Exception {
+    public void deleteById_UserIdIsNotNull_204httpResponse() throws Exception {
         //when
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/user/{id}", 1L)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)

@@ -341,4 +341,14 @@ public class TreatControllerTest {
                 .andExpect(jsonPath("$[1].userId").value(treatsDtoFromDb.get(1).getUserId()))
                 .andExpect(jsonPath("$[2].userId").value(treatsDtoFromDb.get(2).getUserId()));
     }
+
+    @Test
+    public void deleteById_treatIdIsNotNull_204httpResponse() throws Exception {
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/treat/{id}", 1L)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                //then
+                .andExpect(status().isNoContent());
+    }
 }
