@@ -63,6 +63,8 @@ public class TreatServiceImpl implements TreatService {
 
     @Override
     public List<TreatDto> getAllTreatsByUserId(long userId) {
+
+
         return null;
     }
 
