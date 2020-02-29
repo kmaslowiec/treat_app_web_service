@@ -373,4 +373,51 @@ public class TreatServiceImplTest {
         //when-then
         service.getTreatsByIds(ids);
     }
+
+    @Test
+    public void getAllTreatsByUserId_userIdIsInDb_returnsTreatsDto() {
+        //given
+        User user = ObjectFactory.User();
+        String[] treatNames = {"one", "two", "three"};
+        List<Treat> treatsFromDb = new ArrayList<>();
+        for (int i = 0; i < treatNames.length; i++) {
+            Treat treat = ObjectFactory.Treat_user(user);
+            treat.setId((long) i + 1);
+            treat.setName(treatNames[i]);
+            treatsFromDb.add(treat);
+        }
+        List<TreatDto> returnedDtos = new ArrayList<>();
+        for (int i = 0; i < treatNames.length; i++) {
+            TreatDto treatDto = ObjectFactory.TreatDto_userId(1L);
+            treatDto.setId((long) i);
+            treatDto.setName(treatNames[i]);
+            returnedDtos.add(treatDto);
+        }
+        when(userRepo.existsById(user.getId())).thenReturn(true);
+        when(treatRepo.findAllByUserId(user.getId())).thenReturn(treatsFromDb);
+        when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(returnedDtos);
+
+        List<TreatDto> testedDto = service.getAllTreatsByUserId(user.getId());
+        assertThat(testedDto).isNotNull();
+
+        for (int i = 0; i < treatNames.length; i++) {
+            assertThat(testedDto.get(i).getId()).isNotNull();
+            assertThat(testedDto.get(i))
+                    .hasFieldOrPropertyWithValue("id", testedDto.get(i).getId())
+                    .hasFieldOrPropertyWithValue("name", testedDto.get(i).getName())
+                    .hasFieldOrPropertyWithValue("amount", testedDto.get(i).getAmount())
+                    .hasFieldOrPropertyWithValue("increaseBy", testedDto.get(i).getIncreaseBy())
+                    .hasFieldOrPropertyWithValue("pic", testedDto.get(i).getPic())
+                    .hasFieldOrPropertyWithValue("userId", testedDto.get(i).getUserId());
+        }
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void getAllTreatsByUserId_userIdIsNotDb_throwsNotFoundException() {
+        //given
+        User user = ObjectFactory.User();
+        //when-then
+        when(userRepo.existsById(user.getId())).thenReturn(false);
+        service.getAllTreatsByUserId(user.getId());
+    }
 }
