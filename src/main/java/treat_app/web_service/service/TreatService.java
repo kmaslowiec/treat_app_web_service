@@ -15,4 +15,6 @@ public interface TreatService {
     TreatDto getTreatById(long id);
 
     List<TreatDto> getTreatsByIds(List<Long> ids);
+
+    List<TreatDto> getAllTreatsByUserId(long userId);
 }

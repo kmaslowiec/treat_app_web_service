@@ -3,7 +3,6 @@ package treat_app.web_service.repository;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.stereotype.Repository;
 import treat_app.web_service.entity.Treat;
-import treat_app.web_service.entity.User;
 import treat_app.web_service.exceptions.NotFoundException;
 import treat_app.web_service.util.MyStrings;
 
@@ -22,5 +21,5 @@ public interface TreatRepo extends CrudRepository<Treat, Long> {
     @Override
     List<Treat> findAllById(Iterable<Long> list);
 
-    List<Treat> findAllByUser(User user);
+    List<Treat> findAllByUserId(long id);
 }

@@ -113,7 +113,7 @@ public class UserServiceImplTest {
         returnedDto.setTreatDtos(dtosFromUser);
         //when
         when(userRepo.findByIdOrThrow(1L)).thenReturn(userFromDb);
-        when(treatRepo.findAllByUser(userFromDb)).thenReturn(treatsFromDb);
+        when(treatRepo.findAllByUserId(userFromDb.getId())).thenReturn(treatsFromDb);
         when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
@@ -145,7 +145,7 @@ public class UserServiceImplTest {
         returnedDto.setTreatDtos(dtosFromUser);
         //when
         when(userRepo.findByIdOrThrow(1L)).thenReturn(userFromDb);
-        when(treatRepo.findAllByUser(userFromDb)).thenReturn(treatsFromDb);
+        when(treatRepo.findAllByUserId(userFromDb.getId())).thenReturn(treatsFromDb);
         when(treatMapper.toTreatDtos(treatsFromDb)).thenReturn(dtosFromUser);
         when(userMapper.toDto(userFromDb)).thenReturn(returnedDto);
 
