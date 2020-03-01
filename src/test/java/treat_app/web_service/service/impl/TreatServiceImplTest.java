@@ -24,6 +24,7 @@ import java.util.List;
 import java.util.Random;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 @RunWith(SpringRunner.class)
@@ -419,5 +420,27 @@ public class TreatServiceImplTest {
         //when-then
         when(userRepo.existsById(user.getId())).thenReturn(false);
         service.getAllTreatsByUserId(user.getId());
+    }
+
+    @Test
+    public void deleteUserById_treatIdIsInDb_deleteTheEntityFromDb() {
+        //given
+        Treat treatInDb = ObjectFactory.Treat_user(ObjectFactory.User());
+        long id = 1L;
+        //when-then
+        when(treatRepo.findByIdOrThrow(id)).thenReturn(treatInDb);
+        service.deleteUserById(id);
+        verify(userRepo).deleteById(treatInDb.getId());
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void deleteUserById_idIsNotInDb_throwsNotFoundException() {
+        //given
+        Treat treatInDb = ObjectFactory.Treat_user(ObjectFactory.User());
+        long id = 1L;
+        //when-then
+        when(treatRepo.findByIdOrThrow(id)).thenThrow(NotFoundException.class);
+        service.deleteUserById(id);
+        verify(userRepo).deleteById(treatInDb.getId());
     }
 }
