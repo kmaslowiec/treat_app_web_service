@@ -351,4 +351,12 @@ public class TreatControllerTest {
                 //then
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    public void deleteManyByIds_allIdsAreValid_204httpResponse() throws Exception {
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/treat/many").param("ids", "1, 2, 3"))
+                //then
+                .andExpect(status().isNoContent());
+    }
 }
