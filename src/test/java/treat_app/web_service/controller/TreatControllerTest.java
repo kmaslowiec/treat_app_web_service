@@ -367,4 +367,13 @@ public class TreatControllerTest {
                 //then
                 .andExpect(status().isNoContent());
     }
+
+    @Test
+    public void deleteManyByUserId_userIdIsInDb_deletesAllTreatsInUser() throws Exception {
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/treat/{userId}", 1L)
+                .contentType(MediaType.APPLICATION_JSON_UTF8)
+                .accept(MediaType.APPLICATION_JSON_UTF8))
+                //then
+                .andExpect(status().isNoContent());
+    }
 }

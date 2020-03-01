@@ -94,4 +94,10 @@ public class TreatController {
         treatService.deleteTreatsByIds(ids);
         return ResponseEntity.noContent().build();
     }
+
+    @DeleteMapping("many/{userId}")
+    public ResponseEntity<Long> deleteManyByUserId(@PathVariable long userId) {
+        treatService.deleteTreatsByUser(userId);
+        return null;
+    }
 }

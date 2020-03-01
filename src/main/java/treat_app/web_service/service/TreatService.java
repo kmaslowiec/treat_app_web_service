@@ -21,4 +21,6 @@ public interface TreatService {
     void deleteTreatById(long id);
 
     boolean deleteTreatsByIds(List<Long> ids);
+
+    void deleteTreatsByUser(long userId);
 }

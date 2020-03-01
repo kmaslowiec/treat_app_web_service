@@ -464,4 +464,19 @@ public class TreatServiceImplTest {
         }
         service.deleteTreatsByIds(ids);
     }
+
+    @Test
+    public void deleteTreatsByUser_theIdIsInTheDb_theTreatsAreDeleted() {
+        User user = ObjectFactory.User();
+        when(userRepo.findByIdOrThrow(1L)).thenReturn(user);
+
+        service.deleteTreatsByUser(1L);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void deleteTreatsByUser_theIdIsNotInDb_throwsNotFoundException() {
+        User user = ObjectFactory.User();
+        when(userRepo.findByIdOrThrow(1L)).thenThrow(NotFoundException.class);
+        service.deleteTreatsByUser(1L);
+    }
 }
