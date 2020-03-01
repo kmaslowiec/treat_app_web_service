@@ -440,4 +440,28 @@ public class TreatServiceImplTest {
         when(treatRepo.findByIdOrThrow(id)).thenThrow(NotFoundException.class);
         service.deleteTreatById(id);
     }
+
+    @Test
+    public void deleteTreatsByIds() {
+        //given
+        List<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
+
+        //when
+        for (long i : ids) {
+            when(treatRepo.existsById(i)).thenReturn(true);
+        }
+        service.deleteTreatsByIds(ids);
+    }
+
+    @Test(expected = NotFoundException.class)
+    public void deleteTreatsByIds_theIdsAreNotInDb_throwsNotFoundException() {
+        //given
+        List<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
+
+        //when
+        for (long i : ids) {
+            when(treatRepo.existsById(i)).thenReturn(false);
+        }
+        service.deleteTreatsByIds(ids);
+    }
 }
