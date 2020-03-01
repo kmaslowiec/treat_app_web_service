@@ -17,4 +17,6 @@ public interface TreatService {
     List<TreatDto> getTreatsByIds(List<Long> ids);
 
     List<TreatDto> getAllTreatsByUserId(long userId);
+
+    void deleteUserById(long id);
 }

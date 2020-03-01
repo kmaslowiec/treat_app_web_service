@@ -85,7 +85,7 @@ public class TreatController {
 
     @DeleteMapping("{id}")
     public ResponseEntity<Long> deleteById(@PathVariable long id) {
-
-        return null;
+        treatService.deleteUserById(id);
+        return ResponseEntity.noContent().build();
     }
 }
