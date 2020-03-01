@@ -422,7 +422,7 @@ public class TreatServiceImplTest {
     }
 
     @Test
-    public void deleteUserById_treatIdIsInDb_deleteTheEntityFromDb() {
+    public void deleteTreatById_treatIdIsInDb_deleteTheEntityFromDb() {
         //given
         Treat treatInDb = ObjectFactory.Treat_user(ObjectFactory.User());
         long id = 1L;
@@ -432,7 +432,7 @@ public class TreatServiceImplTest {
     }
 
     @Test(expected = NotFoundException.class)
-    public void deleteUserById_idIsNotInDb_throwsNotFoundException() {
+    public void deleteTreatById_idIsNotInDb_throwsNotFoundException() {
         //given
         Treat treatInDb = ObjectFactory.Treat_user(ObjectFactory.User());
         long id = 1L;

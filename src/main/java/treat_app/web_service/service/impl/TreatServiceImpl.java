@@ -77,8 +77,10 @@ public class TreatServiceImpl implements TreatService {
     }
 
     @Override
-    public void deleteTreatsByIds(List<Long> ids) {
-
+    public boolean deleteTreatsByIds(List<Long> ids) {
+        checkIfIdsAreInDb(ids);
+        ids.forEach(i -> treatRepo.deleteById(i));
+        return true;
     }
 
     private <T> Predicate<T> distinctByKey(Function<? super T, Object> keyExtractor) {

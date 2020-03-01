@@ -20,7 +20,6 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
-import static org.mockito.Mockito.doNothing;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.verifyNoMoreInteractions;
@@ -364,10 +363,8 @@ public class TreatControllerTest {
     public void deleteManyByIds_allIdsAreValid_204httpResponse() throws Exception {
         //when
         List<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
-        doNothing().when(treatService).deleteTreatsByIds(ids);
         mockMvc.perform(MockMvcRequestBuilders.delete("/api/treat/many").param("ids", "1, 2, 3"))
                 //then
                 .andExpect(status().isNoContent());
-        //TODO test fails. Refactor required.
     }
 }
