@@ -428,7 +428,7 @@ public class TreatServiceImplTest {
         long id = 1L;
         //when-then
         when(treatRepo.findByIdOrThrow(id)).thenReturn(treatInDb);
-        service.deleteUserById(id);
+        service.deleteTreatById(id);
     }
 
     @Test(expected = NotFoundException.class)
@@ -438,6 +438,6 @@ public class TreatServiceImplTest {
         long id = 1L;
         //when-then
         when(treatRepo.findByIdOrThrow(id)).thenThrow(NotFoundException.class);
-        service.deleteUserById(id);
+        service.deleteTreatById(id);
     }
 }

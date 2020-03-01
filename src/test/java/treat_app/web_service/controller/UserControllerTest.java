@@ -15,6 +15,9 @@ import treat_app.web_service.service.UserService;
 import treat_app.web_service.service.dto.UserDto;
 import treat_app.web_service.util.MyStrings;
 
+import static org.mockito.Mockito.times;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -129,5 +132,7 @@ public class UserControllerTest {
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 //then
                 .andExpect(status().isNoContent());
+        verify(userService, times(1)).deleteUserById(1L);
+        verifyNoMoreInteractions(userService);
     }
 }
