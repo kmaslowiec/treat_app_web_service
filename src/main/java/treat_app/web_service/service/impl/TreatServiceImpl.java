@@ -2,6 +2,7 @@ package treat_app.web_service.service.impl;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import treat_app.web_service.entity.Treat;
 import treat_app.web_service.entity.User;
 import treat_app.web_service.exceptions.NotFoundException;
@@ -85,6 +86,7 @@ public class TreatServiceImpl implements TreatService {
     }
 
     @Override
+    @Transactional
     public void deleteTreatsByUser(long userId) {
         User userInDb = userRepo.findByIdOrThrow(userId);
         treatRepo.deleteAllByUser(userInDb);

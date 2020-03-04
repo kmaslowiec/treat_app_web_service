@@ -89,7 +89,7 @@ public class TreatController {
         return ResponseEntity.noContent().build();
     }
 
-    @DeleteMapping
+    @DeleteMapping("many")
     public ResponseEntity<Long> deleteManyByIds(@RequestParam List<Long> ids) {
         treatService.deleteTreatsByIds(ids);
         return ResponseEntity.noContent().build();
@@ -98,6 +98,6 @@ public class TreatController {
     @DeleteMapping("many/{userId}")
     public ResponseEntity<Long> deleteManyByUserId(@PathVariable long userId) {
         treatService.deleteTreatsByUser(userId);
-        return null;
+        return ResponseEntity.noContent().build();
     }
 }

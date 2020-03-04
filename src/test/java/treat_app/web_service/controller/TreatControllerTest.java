@@ -1,6 +1,5 @@
 package treat_app.web_service.controller;
 
-import org.junit.Ignore;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,6 @@ import java.util.List;
 
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
-import static org.mockito.Mockito.verifyNoMoreInteractions;
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.header;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
@@ -355,11 +353,9 @@ public class TreatControllerTest {
                 //then
                 .andExpect(status().isNoContent());
         verify(treatService, times(1)).deleteTreatById(1L);
-        verifyNoMoreInteractions(treatService);
     }
 
     @Test
-    @Ignore
     public void deleteManyByIds_allIdsAreValid_204httpResponse() throws Exception {
         //when
         List<Long> ids = new ArrayList<>(Arrays.asList(1L, 2L, 3L));
@@ -370,10 +366,12 @@ public class TreatControllerTest {
 
     @Test
     public void deleteManyByUserId_userIdIsInDb_deletesAllTreatsInUser() throws Exception {
-        mockMvc.perform(MockMvcRequestBuilders.delete("/api/treat/{userId}", 1L)
+        //when
+        mockMvc.perform(MockMvcRequestBuilders.delete("/api/treat/many/{userId}", 1L)
                 .contentType(MediaType.APPLICATION_JSON_UTF8)
                 .accept(MediaType.APPLICATION_JSON_UTF8))
                 //then
                 .andExpect(status().isNoContent());
+        verify(treatService, times(1)).deleteTreatsByUser(1L);
     }
 }
