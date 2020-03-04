@@ -29,11 +29,13 @@ public class UserRepoTest {
     public void findByIdThrow_validLongId_returnValidUser() {
         //given
         User user = ObjectFactory.User();
+        user.setId(null);
         Treat treatInDb = ObjectFactory.Treat_user(user);
+        treatInDb.setId(null);
         user.setTreats(Collections.singletonList(treatInDb));
 
         //when
-        User userInDb = entityManager.merge(user);
+        User userInDb = entityManager.persistAndFlush(user);
         User tested = userRepo.findByIdOrThrow(userInDb.getId());
 
         //then
