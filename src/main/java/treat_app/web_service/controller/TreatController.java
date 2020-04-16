@@ -21,7 +21,7 @@ import java.net.URISyntaxException;
 import java.util.List;
 
 @RestController
-@RequestMapping("api/treat")
+@RequestMapping("/treat")
 @AllArgsConstructor
 public class TreatController {
 
